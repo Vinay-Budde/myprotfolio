@@ -39,43 +39,41 @@ export const Contact = () => {
    * Submit form data to Web3Forms API.
    * Documentation: https://docs.web3forms.com/
    */
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    // Verification: Check if the access key is correctly set
-    const accessKey = import.meta.env.VITE_WEB3FORMS_KEY || 'YOUR_ACCESS_KEY_HERE';
+    // Verification: Priority for the key in .env, fallback to user provided key
+    const accessKey = import.meta.env.VITE_WEB3FORMS_KEY || '864b34c4-861b-4aeb-a860-d88c3acd5e0b';
     
     if (accessKey === 'YOUR_ACCESS_KEY_HERE' || !accessKey) {
-      alert('Error: You missed the final step! Please add your Web3Forms Access Key to the ".env" file to enable email delivery.');
+      alert('Error: Please add your Web3Forms Access Key to the ".env" file to enable email delivery.');
       return;
     }
 
     setFormStatus('sending');
 
     try {
-      // Prepare payload for Web3Forms
+      // Use the FormData approach as requested by the user
+      const formDataToSend = new FormData(e.currentTarget);
+      formDataToSend.append("access_key", accessKey);
+      formDataToSend.append("subject", `New Portfolio Message: ${formData.subject}`);
+      formDataToSend.append("from_name", formData.name);
+
       const response = await fetch('https://api.web3forms.com/submit', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Accept': 'application/json'
-        },
-        body: JSON.stringify({
-          access_key: accessKey, 
-          ...formData,
-          from_name: formData.name,
-          subject: `New Portfolio Message: ${formData.subject}`
-        })
+        body: formDataToSend
       });
 
       const result = await response.json();
 
       if (result.success) {
         setFormStatus('success');
+        // Clear form
         setFormData({ name: '', email: '', subject: 'General Inquiry', message: '' });
-        // Reset to idle after 5 seconds to allow for new messages
+        // Reset to idle after 5 seconds
         setTimeout(() => setFormStatus('idle'), 5000);
       } else {
+        console.error('Web3Forms Error:', result);
         setFormStatus('error');
       }
     } catch (error) {
