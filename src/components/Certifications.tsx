@@ -23,22 +23,22 @@ const certData = [
   {
     title: 'Cloud Computing Architect',
     org: 'AWS CERTIFIED PROFESSIONAL',
-    date: 'Issued Apr 3',
+    date: 'Issued May 25',
     icon: Cloud,
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
+    logo: '/cloud.png',
     color: 'bg-[#e7f0f7]',
     accent: 'text-[#6495bc]',
-    link: '#'
+    link: 'https://drive.google.com/file/d/1qcAj67Yt8UNUpNnTfdsgSYqnIHwoiP3q/view?usp=sharing'
   },
   {
     title: 'Master Generative AI',
     org: 'DEEPLEARNING.AI',
     date: 'Issued Feb 2024',
     icon: Cpu,
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/google/google-original.svg', // Using google as proxy for AI
+    logo: '/masgenai.png', // Using google as proxy for AI
     color: 'bg-[#e9f5f2]',
     accent: 'text-[#6ba192]',
-    link: '#'
+    link: 'https://drive.google.com/file/d/1qmidK2NCQGQwtYgPMDR9zfm97O5CC1s-/view?usp=sharing'
   },
   {
     title: 'Java Bootcamp(LPU)',
@@ -112,18 +112,16 @@ export const Certifications = () => {
               >
                 {/* Brand Visual Layer */}
                 <div className={cn("h-64 relative flex items-center justify-center p-12 transition-colors duration-500", cert.color.replace('bg-', 'bg-opacity-10 bg-'))}>
-                  {/* Floating Org Logo */}
-                  <div className="absolute top-6 right-6 w-10 h-10 bg-zinc-900 shadow-lg rounded-xl flex items-center justify-center p-2 border border-white/5">
-                    <img
-                      src={cert.logo}
-                      alt={cert.org}
-                      className="w-full h-full object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
+                  {/* Primary Vendor Logo */}
+                  <div className="relative z-10 w-32 h-32 flex items-center justify-center">
+                    <img 
+                      src={cert.logo} 
+                      alt={cert.org} 
+                      className="w-full h-full object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" 
                     />
                   </div>
-                  {/* Background Symbol */}
-                  <cert.icon size={80} className={cn("opacity-20 group-hover:scale-110 group-hover:opacity-40 transition-all duration-700", cert.accent)} />
                 </div>
-
+ 
                 {/* Information Strategy Layer */}
                 <div className="p-10 space-y-6 flex-1 flex flex-col">
                   <div className="space-y-4">
