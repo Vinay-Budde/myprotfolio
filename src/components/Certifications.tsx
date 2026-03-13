@@ -14,7 +14,7 @@ const certData = [
     title: 'ChatGPT-4 Prompt Engineering',
     org: 'OPENAI CERTIFIED SPECIALIST',
     date: 'Issued Aug 25',
-    logo: '/chatgpt-4.png', // Fall to icon if needed
+    logo: '/assets/chatgpt-4.png', // Fall to icon if needed
     icon: Sparkles,
     color: 'bg-[#f8ede5]',
     accent: 'text-[#d48d61]',
@@ -25,7 +25,7 @@ const certData = [
     org: 'AWS CERTIFIED PROFESSIONAL',
     date: 'Issued May 25',
     icon: Cloud,
-    logo: '/cloud.png',
+    logo: '/assets/cloud.png',
     color: 'bg-[#e7f0f7]',
     accent: 'text-[#6495bc]',
     link: 'https://drive.google.com/file/d/1qcAj67Yt8UNUpNnTfdsgSYqnIHwoiP3q/view?usp=sharing'
@@ -35,7 +35,7 @@ const certData = [
     org: 'DEEPLEARNING.AI',
     date: 'Issued Feb 2024',
     icon: Cpu,
-    logo: '/masgenai.png', // Using google as proxy for AI
+    logo: '/assets/masgenai.png', // Using google as proxy for AI
     color: 'bg-[#e9f5f2]',
     accent: 'text-[#6ba192]',
     link: 'https://drive.google.com/file/d/1qmidK2NCQGQwtYgPMDR9zfm97O5CC1s-/view?usp=sharing'
@@ -45,7 +45,7 @@ const certData = [
     org: 'TRAINING',
     date: 'Jun’ 25 – Jul’ 25',
     icon: Code2,
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+    logo: '/assets/javabootcamp.png',
     color: 'bg-[#f4f2ee]',
     accent: 'text-[#e76f51]',
     description: 'Strengthened proficiency in Core Java, OOP principles, and advanced problem-solving using DSA (Backtracking, Recursion, Two-pointers). Focused on code optimization and space/time complexity analysis.',
@@ -111,13 +111,13 @@ export const Certifications = () => {
                 className="group bg-zinc-900/30 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl hover:border-orange-500/20 transition-all duration-500 flex flex-col"
               >
                 {/* Brand Visual Layer */}
-                <div className={cn("h-64 relative flex items-center justify-center p-12 transition-colors duration-500", cert.color.replace('bg-', 'bg-opacity-10 bg-'))}>
-                  {/* Primary Vendor Logo */}
-                  <div className="relative z-10 w-32 h-32 flex items-center justify-center">
+                <div className={cn("h-64 relative flex items-center justify-center p-6 transition-colors duration-500", cert.color.replace('bg-', 'bg-opacity-10 bg-'))}>
+                  {/* Primary Vendor Logo / Certificate Image */}
+                  <div className="relative z-10 w-full h-full flex items-center justify-center overflow-hidden rounded-2xl">
                     <img 
                       src={cert.logo} 
                       alt={cert.org} 
-                      className="w-full h-full object-contain grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110 transition-all duration-700" 
+                      className="w-full h-full object-contain group-hover:scale-105 transition-all duration-700 drop-shadow-2xl" 
                     />
                   </div>
                 </div>
