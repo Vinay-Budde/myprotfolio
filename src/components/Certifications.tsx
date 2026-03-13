@@ -1,28 +1,29 @@
 import { motion } from 'framer-motion';
-import { 
-  Award, 
-  Cloud, 
-  Cpu, 
-  Sparkles, 
-  CheckCircle2, 
-  ExternalLink 
+import {
+  Award,
+  Cloud,
+  Cpu,
+  Sparkles,
+  CheckCircle2,
+  ExternalLink,
+  Code2
 } from 'lucide-react';
 
 const certData = [
   {
     title: 'ChatGPT-4 Prompt Engineering',
     org: 'OPENAI CERTIFIED SPECIALIST',
-    date: 'Issued Dec 2023',
-    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/openai/openai-original.svg', // Fallback to icon if needed
+    date: 'Issued Aug 25',
+    logo: '/chatgpt-4.png', // Fall to icon if needed
     icon: Sparkles,
     color: 'bg-[#f8ede5]',
     accent: 'text-[#d48d61]',
-    link: '#'
+    link: 'https://drive.google.com/file/d/1QL7RxsEdWvK-TEfEtpl1Mf2pemJbut-O/view?usp=sharing'
   },
   {
     title: 'Cloud Computing Architect',
     org: 'AWS CERTIFIED PROFESSIONAL',
-    date: 'Issued Oct 2023',
+    date: 'Issued Apr 3',
     icon: Cloud,
     logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/amazonwebservices/amazonwebservices-original-wordmark.svg',
     color: 'bg-[#e7f0f7]',
@@ -38,6 +39,17 @@ const certData = [
     color: 'bg-[#e9f5f2]',
     accent: 'text-[#6ba192]',
     link: '#'
+  },
+  {
+    title: 'Java Bootcamp(LPU)',
+    org: 'TRAINING',
+    date: 'Jun’ 25 – Jul’ 25',
+    icon: Code2,
+    logo: 'https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg',
+    color: 'bg-[#f4f2ee]',
+    accent: 'text-[#e76f51]',
+    description: 'Strengthened proficiency in Core Java, OOP principles, and advanced problem-solving using DSA (Backtracking, Recursion, Two-pointers). Focused on code optimization and space/time complexity analysis.',
+    link: '#'
   }
 ];
 
@@ -48,7 +60,7 @@ const certData = [
 export const Certifications = () => {
   return (
     <section id="certifications" className="py-32 px-4 relative overflow-hidden bg-transparent">
-      
+
       {/* Background Aesthetic Layers */}
       <div className="absolute inset-0 z-0 pointer-events-none">
         <div className="absolute top-1/2 -right-64 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 blur-[120px] rounded-full" />
@@ -56,7 +68,7 @@ export const Certifications = () => {
       </div>
 
       <div className="max-w-7xl mx-auto space-y-24 relative z-10">
-        
+
         {/* Header Messaging Section */}
         <div className="space-y-6 max-w-3xl text-left">
           <motion.div
@@ -80,10 +92,10 @@ export const Certifications = () => {
         <div className="space-y-12">
           {/* Section Marker */}
           <div className="flex items-center gap-4">
-             <div className="p-3 bg-orange-600/10 rounded-2xl text-orange-500">
-                <Award size={24} />
-             </div>
-             <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Major Certifications</h3>
+            <div className="p-3 bg-orange-600/10 rounded-2xl text-orange-500">
+              <Award size={24} />
+            </div>
+            <h3 className="text-2xl font-black text-white uppercase tracking-tighter">Major Certifications</h3>
           </div>
 
           {/* Scalable Grid Layout */}
@@ -102,10 +114,10 @@ export const Certifications = () => {
                 <div className={cn("h-64 relative flex items-center justify-center p-12 transition-colors duration-500", cert.color.replace('bg-', 'bg-opacity-10 bg-'))}>
                   {/* Floating Org Logo */}
                   <div className="absolute top-6 right-6 w-10 h-10 bg-zinc-900 shadow-lg rounded-xl flex items-center justify-center p-2 border border-white/5">
-                    <img 
-                      src={cert.logo} 
-                      alt={cert.org} 
-                      className="w-full h-full object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all" 
+                    <img
+                      src={cert.logo}
+                      alt={cert.org}
+                      className="w-full h-full object-contain grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all"
                     />
                   </div>
                   {/* Background Symbol */}
@@ -114,31 +126,38 @@ export const Certifications = () => {
 
                 {/* Information Strategy Layer */}
                 <div className="p-10 space-y-6 flex-1 flex flex-col">
-                   <div className="space-y-4">
-                      <h4 className="text-xl md:text-2xl font-black text-white tracking-tight leading-none group-hover:text-orange-500 transition-colors">
-                        {cert.title}
-                      </h4>
-                      <p className="text-zinc-500 font-black uppercase text-[10px] tracking-[0.2em]">
-                        {cert.org}
-                      </p>
-                   </div>
-                   
-                   {/* Verification & Links Area */}
-                   <div className="pt-6 mt-auto border-t border-white/5 flex items-center justify-between">
-                     <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
-                       <Award size={12} className="text-orange-500" />
-                       {cert.date}
-                     </span>
-                     <motion.a 
-                       whileHover={{ scale: 1.1 }}
-                       whileTap={{ scale: 0.9 }}
-                       href={cert.link}
-                       className="p-3 text-zinc-500 hover:text-orange-500 transition-colors"
-                       aria-label="Verify Certification"
-                     >
-                        <ExternalLink size={18} />
-                     </motion.a>
-                   </div>
+                  <div className="space-y-4">
+                    <h4 className="text-xl md:text-2xl font-black text-white tracking-tight leading-none group-hover:text-orange-500 transition-colors">
+                      {cert.title}
+                    </h4>
+                    <p className="text-zinc-500 font-black uppercase text-[10px] tracking-[0.2em]">
+                      {cert.org}
+                    </p>
+                  </div>
+
+                  {/* Add Description if exists */}
+                  {'description' in cert && (
+                    <p className="text-zinc-500 text-xs font-semibold leading-relaxed tracking-tight line-clamp-3">
+                      {cert.description}
+                    </p>
+                  )}
+
+                  {/* Verification & Links Area */}
+                  <div className="pt-6 mt-auto border-t border-white/5 flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                      <Award size={12} className="text-orange-500" />
+                      {cert.date}
+                    </span>
+                    <motion.a
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                      href={cert.link}
+                      className="p-3 text-zinc-500 hover:text-orange-500 transition-colors"
+                      aria-label="Verify Certification"
+                    >
+                      <ExternalLink size={18} />
+                    </motion.a>
+                  </div>
                 </div>
               </motion.div>
             ))}
