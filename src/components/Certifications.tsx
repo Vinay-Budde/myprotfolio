@@ -49,7 +49,7 @@ const certData = [
     color: 'bg-[#f4f2ee]',
     accent: 'text-[#e76f51]',
     description: 'Strengthened proficiency in Core Java, OOP principles, and advanced problem-solving using DSA (Backtracking, Recursion, Two-pointers). Focused on code optimization and space/time complexity analysis.',
-    link: '#'
+    link: 'https://drive.google.com/file/d/1F18GOY81Fr5Dx6I79SL-DXCWlW2L6WQC/view?usp=sharing'
   }
 ];
 
@@ -114,14 +114,14 @@ export const Certifications = () => {
                 <div className={cn("h-64 relative flex items-center justify-center p-6 transition-colors duration-500", cert.color.replace('bg-', 'bg-opacity-10 bg-'))}>
                   {/* Primary Vendor Logo / Certificate Image */}
                   <div className="relative z-10 w-full h-full flex items-center justify-center overflow-hidden rounded-2xl">
-                    <img 
-                      src={cert.logo} 
-                      alt={cert.org} 
-                      className="w-full h-full object-contain group-hover:scale-105 transition-all duration-700 drop-shadow-2xl" 
+                    <img
+                      src={cert.logo}
+                      alt={cert.org}
+                      className="w-full h-full object-contain group-hover:scale-105 transition-all duration-700 drop-shadow-2xl"
                     />
                   </div>
                 </div>
- 
+
                 {/* Information Strategy Layer */}
                 <div className="p-10 space-y-6 flex-1 flex flex-col">
                   <div className="space-y-4">

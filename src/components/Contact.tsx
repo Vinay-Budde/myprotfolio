@@ -8,7 +8,8 @@ import {
   SendHorizontal,
   ArrowRight,
   CheckCircle2,
-  AlertCircle
+  AlertCircle,
+  Phone
 } from 'lucide-react';
 import { Magnetic } from './ui/Magnetic';
 
@@ -124,12 +125,23 @@ export const Contact = () => {
                 </div>
                 <div>
                   <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Email Me</p>
-                  <p className="text-white font-black tracking-tight text-lg">vinaybudde263@gmail.com</p>
+                   <p className="text-white font-black tracking-tight text-lg">vinaybudde263@gmail.com</p>
+                </div>
+             </div>
+
+             {/* Phone Connection Point */}
+             <div className="flex items-center gap-6 p-4 bg-zinc-900/30 border border-white/5 rounded-3xl shadow-2xl hover:border-orange-500/20 transition-all group">
+                <div className="p-4 bg-orange-600/10 rounded-2xl text-orange-500">
+                   <Phone size={24} />
+                </div>
+                <div>
+                  <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Call Me</p>
+                  <p className="text-white font-black tracking-tight text-lg">+91 6303665851</p>
                 </div>
              </div>
 
              {/* Location Awareness */}
-             <div className="flex items-center gap-6 p-4 bg-zinc-900/30 border border-white/5 rounded-3xl shadow-2xl hover:border-orange-500/20 transition-all group">
+            <div className="flex items-center gap-6 p-4 bg-zinc-900/30 border border-white/5 rounded-3xl shadow-2xl hover:border-orange-500/20 transition-all group">
                 <div className="p-4 bg-orange-600/10 rounded-2xl text-orange-500">
                    <MapPin size={24} />
                 </div>
