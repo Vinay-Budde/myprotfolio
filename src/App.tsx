@@ -7,6 +7,7 @@ import { Projects } from './components/Projects';
 import { Certifications } from './components/Certifications';
 import { Contact } from './components/Contact';
 import { Preloader } from './components/Preloader';
+import { FloatingBackground } from './components/ui/FloatingBackground';
 import { Github, Linkedin } from 'lucide-react';
 
 /**
@@ -29,11 +30,14 @@ function App() {
       {/* Visual entry effect */}
       <Preloader />
       
+      {/* Background Ambience Layer */}
+      <FloatingBackground />
+      
       <motion.div 
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 0.8 }}
-        className="relative min-h-screen bg-background overflow-x-hidden selection:bg-orange-500/30"
+        className="relative min-h-screen bg-transparent overflow-x-hidden selection:bg-orange-500/30"
       >
         {/* Global Progress Indicator */}
         <motion.div

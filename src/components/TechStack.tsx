@@ -103,7 +103,7 @@ const bottomRibbon = [
  */
 export const TechStack = () => {
   return (
-    <section id="skills" className="py-32 px-4 relative overflow-hidden bg-black/20">
+    <section id="skills" className="py-32 px-4 relative overflow-hidden bg-transparent">
       <div className="max-w-7xl mx-auto space-y-24">
 
         {/* Header: Section Context */}

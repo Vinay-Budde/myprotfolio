@@ -47,7 +47,7 @@ const certData = [
  */
 export const Certifications = () => {
   return (
-    <section id="certifications" className="py-32 px-4 relative overflow-hidden bg-black/20">
+    <section id="certifications" className="py-32 px-4 relative overflow-hidden bg-transparent">
       
       {/* Background Aesthetic Layers */}
       <div className="absolute inset-0 z-0 pointer-events-none">

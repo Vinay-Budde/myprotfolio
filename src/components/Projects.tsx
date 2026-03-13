@@ -66,7 +66,7 @@ export const Projects = () => {
   );
 
   return (
-    <section id="projects" className="py-32 px-4 relative bg-[#0b0f17]/30">
+    <section id="projects" className="py-32 px-4 relative bg-transparent">
       <div className="max-w-7xl mx-auto space-y-20">
 
         {/* Header Area & Filter Controls */}

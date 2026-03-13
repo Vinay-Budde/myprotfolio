@@ -10,7 +10,6 @@ import {
   Github,
   Linkedin
 } from 'lucide-react';
-import { Magnetic } from './ui/Magnetic';
 
 const softSkills = [
   { name: "Problem-Solving", icon: Brain },
@@ -29,7 +28,7 @@ const coreStack = [
  */
 export const About = () => {
   return (
-    <section id="about" className="py-32 px-4 relative bg-[#0b0f17]/50">
+    <section id="about" className="py-32 px-4 relative bg-transparent">
       <div className="max-w-6xl mx-auto space-y-24">
         
         {/* Profile Introduction Grid */}
@@ -210,30 +209,6 @@ export const About = () => {
                 ))}
               </div>
             </section>
-
-            {/* Direct Opportunity Invitation */}
-            <motion.div
-              whileHover={{ scale: 1.02 }}
-              className="bg-orange-600 p-12 rounded-[3.5rem] shadow-2xl shadow-orange-600/20 space-y-10 text-center lg:text-left relative overflow-hidden group"
-            >
-              <div className="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-64 h-64 bg-white/10 blur-[80px] rounded-full pointer-events-none" />
-              
-              <div className="space-y-4">
-                <h4 className="text-4xl font-black text-white tracking-tighter uppercase leading-none">Let's work together</h4>
-                <p className="text-orange-50/80 font-semibold leading-relaxed tracking-tight text-sm">
-                  Have a project in mind or want to discuss a potential role? I'm currently open to new opportunities.
-                </p>
-              </div>
-
-              <Magnetic>
-                <a 
-                  href="mailto:vinaybudde263@gmail.com" 
-                  className="inline-block w-full py-6 bg-white text-orange-600 font-black rounded-[2rem] text-sm uppercase tracking-[0.3em] hover:shadow-2xl transition-all shadow-xl"
-                >
-                  Say Hello
-                </a>
-              </Magnetic>
-            </motion.div>
           </div>
 
         </div>

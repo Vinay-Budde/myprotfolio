@@ -41,6 +41,15 @@ export const Contact = () => {
    */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    // Verification: Check if the access key is correctly set
+    const accessKey = import.meta.env.VITE_WEB3FORMS_KEY || 'YOUR_ACCESS_KEY_HERE';
+    
+    if (accessKey === 'YOUR_ACCESS_KEY_HERE' || !accessKey) {
+      alert('Error: You missed the final step! Please add your Web3Forms Access Key to the ".env" file to enable email delivery.');
+      return;
+    }
+
     setFormStatus('sending');
 
     try {
@@ -52,8 +61,7 @@ export const Contact = () => {
           'Accept': 'application/json'
         },
         body: JSON.stringify({
-          // REPLACE_PLACEHOLDER: Add your Web3Forms access key here
-          access_key: 'YOUR_ACCESS_KEY_HERE', 
+          access_key: accessKey, 
           ...formData,
           from_name: formData.name,
           subject: `New Portfolio Message: ${formData.subject}`
@@ -77,7 +85,7 @@ export const Contact = () => {
   };
 
   return (
-    <section id="contact" className="py-32 px-4 relative overflow-hidden bg-black/10">
+    <section id="contact" className="py-32 px-4 relative overflow-hidden bg-transparent">
       
       {/* Background Aesthetic Atmosphere */}
       <div className="absolute inset-0 z-0 pointer-events-none">
