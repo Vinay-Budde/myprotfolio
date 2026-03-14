@@ -154,7 +154,7 @@ export const About = () => {
                   <div className="p-8 bg-zinc-900/30 border border-white/5 rounded-[2.5rem] shadow-2xl space-y-4">
                     <div className="flex flex-wrap items-center justify-between gap-4">
                       <h4 className="text-xl font-black text-white tracking-tight">Bachelor of Technology (B.Tech)</h4>
-                      <span className="px-3 py-1 bg-orange-600/10 text-orange-500 rounded-lg text-xs font-black tracking-widest">2020 - 2024</span>
+                      <span className="px-3 py-1 bg-orange-600/10 text-orange-500 rounded-lg text-xs font-black tracking-widest">2023 - present</span>
                     </div>
                     <p className="text-orange-500 font-bold uppercase text-[10px] tracking-[0.2em]">Lovely Professional University</p>
                     <p className="text-zinc-500 text-sm font-semibold leading-relaxed tracking-tight">
