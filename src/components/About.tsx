@@ -43,7 +43,7 @@ export const About = () => {
             <div className="w-64 h-64 md:w-80 md:h-80 rounded-full border-[12px] border-orange-500/20 p-2 relative">
               <div className="w-full h-full rounded-full border-4 border-orange-500 overflow-hidden relative group">
                 <img 
-                  src="/assets/avatar.png" 
+                  src="/assets/me22.jpeg" 
                   alt="Budde Vinay" 
                   className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700"
                 />

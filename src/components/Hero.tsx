@@ -19,7 +19,7 @@ export const Hero = () => {
       </div>
 
       <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-16 items-center z-10 w-full">
-        
+
         {/* Left Column: Introduction & Messaging */}
         <motion.div
           initial={{ opacity: 0, x: -30 }}
@@ -140,7 +140,7 @@ export const Hero = () => {
         >
           <div className="relative aspect-[4/5] max-w-[450px] ml-auto overflow-hidden rounded-[3rem] bg-zinc-900/50 border border-white/10 group shadow-[0_0_100px_rgba(249,115,22,0.1)]">
             <img
-              src="/assets/portrait.png"
+              src="/assets/prooo.png"
               alt="Budde Vinay"
               className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
             />
