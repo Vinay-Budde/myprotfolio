@@ -1,105 +1,387 @@
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import {
   Github,
   ArrowUpRight,
-  Globe,
-  Sparkles
+  Trophy,
+  CheckCircle2,
+  Target,
+  X
 } from 'lucide-react';
-import { useState } from 'react';
+import { useState, type MouseEvent, useEffect } from 'react';
 import { cn } from '../lib/utils';
-import { Magnetic } from './ui/Magnetic';
+
+// --- Types & Data ---
+
+interface Project {
+  title: string;
+  id: string;
+  category: string;
+  image: string;
+  shortDesc: string;
+  fullDesc: string;
+  problem: string;
+  solution_short: string;
+  challenge: string;
+  solution: string;
+  architecture: string;
+  role: string;
+  features: { icon: string; text: string }[];
+  metrics: string[];
+  metrics_short: string;
+  complexity: string;
+  tech: { name: string; icon: string }[];
+  github: string;
+  link: string;
+  isFeatured: boolean;
+}
 
 const filters = [
   { name: 'All Work', value: 'all' },
   { name: 'Full Stack', value: 'fullstack' },
   { name: 'Frontend', value: 'frontend' },
-  { name: 'React', value: 'react' },
 ];
 
-const projectData = [
+const projectData: Project[] = [
   {
     title: 'Clean India',
     id: 'clean-india',
     category: 'fullstack',
     image: '/assets/projects/clean-india.png',
-    description: 'A cloud-based civic reporting system with geo-tagged submission, image evidence, and real-time visualization.',
-    tech: ['React.js', 'Node.js', 'MongoDB', 'Leaflet API'],
+    shortDesc: 'Civic issue reporting platform with real-time tracking.',
+    fullDesc: 'A high-perfomance civic report management system designed to bridge the gap between citizens and administration through geo-spatial intelligence.',
+    problem: 'Users couldn’t report civic issues easily or track resolution progress.',
+    solution_short: 'Engineered a geo-tagged platform with automated image validation.',
+    challenge: 'Inefficient civic issue reporting with zero real-time accountability and messy paper trails.',
+    solution: 'Engineered a geo-tagged platform with automated image validation, real-time admin hotspots, and resolution analytics.',
+    architecture: 'MERN + Cloudinary PWA',
+    role: 'Lead Full-Stack Developer',
+    features: [
+      { icon: '📍', text: 'Geo Tracking' },
+      { icon: '📸', text: 'Image Upload' },
+      { icon: '⚡', text: 'Real-time' }
+    ],
+    metrics: ['40% Faster Resolution', '500+ Reports Logged', '99.9% Uptime'],
+    metrics_short: '🚀 40% Faster Resolution',
+    complexity: 'Built scalable REST APIs',
+    tech: [
+      { name: 'React.js', icon: '⚛️' },
+      { name: 'Node.js', icon: '🟢' },
+      { name: 'MongoDB', icon: '🍃' }
+    ],
     github: 'https://github.com/Vinay-Budde/cleanindia',
     link: 'https://cleanindia-two.vercel.app/',
-    isExperimental: false,
+    isFeatured: true,
   },
   {
     title: 'Logic Grid',
     id: 'logic-grid',
     category: 'frontend',
     image: '/assets/projects/logic-grid.png',
-    description: 'Sudoku-inspired logic puzzle with dynamic grid generation, deterministic validation and game-state management.',
-    tech: ['React.js', 'TypeScript', 'Framer Motion'],
+    shortDesc: 'Advanced Sudoku engine with dynamic grid generation.',
+    fullDesc: 'A complex logical puzzle platform that implements BFS/DFS algorithms for deterministic validation and grid generation.',
+    problem: 'Complex logic puzzle validation causing client-side lag.',
+    solution_short: 'Implemented a deterministic algorithm model with optimized state reconciliation.',
+    challenge: 'Complex logic puzzle validation causing client-side lag and inconsistent grid difficulty scaling.',
+    solution: 'Implemented a deterministic algorithmic model with optimized state reconciliation and recursive difficulty generation.',
+    architecture: 'TypeScript Algorithm Engine',
+    role: 'Frontend Architect',
+    features: [
+      { icon: '🧩', text: 'Dynamic Grids' },
+      { icon: '⏱️', text: 'Conflict Detection' },
+      { icon: '💾', text: 'Auto-save' }
+    ],
+    metrics: ['Perfect 100 Lighthouse Score', 'Zero-Lag Validation', '10k+ Grid Permutations'],
+    metrics_short: '🧠 Handles dynamic grid generation',
+    complexity: 'Implements recursive generation algorithms',
+    tech: [
+      { name: 'TypeScript', icon: '📘' },
+      { name: 'React.js', icon: '⚛️' },
+      { name: 'Framer', icon: '🎞️' }
+    ],
     github: 'https://github.com/Vinay-Budde/Sudoku',
     link: 'https://sudoku-zeta-blue.vercel.app/',
-    isExperimental: true,
+    isFeatured: false,
   },
   {
-    title: 'Student Record Manager',
+    title: 'Record Manager',
     id: 'student-manager',
     category: 'fullstack',
-    image: 'https://images.unsplash.com/photo-1517694712202-14dd9538aa97?auto=format&fit=crop&q=80',
-    description: 'Complete student academic record management system with CRUD operations and structured data collections.',
-    tech: ['React.js', 'Node.js', 'MongoDB', 'Java'],
+    image: 'https://images.unsplash.com/photo-1544890225-2f3faec4cd60?auto=format&fit=crop&q=80',
+    shortDesc: 'Enterprise student data system with secure auth.',
+    fullDesc: 'A robust academic management system designed to handle thousands of student records with military-grade security and logging.',
+    problem: 'Legacy systems lacked security, audit trails, and search performance.',
+    solution_short: 'Built a JWT-secured system with high-speed NoSQL indexing.',
+    challenge: 'Legacy student data systems lacking security, audit trails, and efficient search performance.',
+    solution: 'Built a JWT-secured enterprise system with high-speed NoSQL indexing and Mongoose-based schema validation.',
+    architecture: 'Node.js + MongoDB Micro-service',
+    role: 'Backend Specialist',
+    features: [
+      { icon: '🔐', text: 'JWT Auth' },
+      { icon: '🔍', text: 'Fast Search' },
+      { icon: '📝', text: 'Audit Logs' }
+    ],
+    metrics: ['1000+ Records Handled', 'Sub-100ms Search', 'Secure Role Management'],
+    metrics_short: '📈 Optimized API calls (Sub-100ms)',
+    complexity: 'Built scalable REST APIs & secure role systems',
+    tech: [
+      { name: 'Node.js', icon: '🟢' },
+      { name: 'MongoDB', icon: '🍃' },
+      { name: 'React.js', icon: '⚛️' }
+    ],
     github: 'https://github.com/Vinay-Budde/recordmanager',
     link: 'https://recordmanager.vercel.app/',
-    isExperimental: false,
+    isFeatured: false,
   }
 ];
 
-/**
- * Projects Section Component
- * Display a curated list of professional work with interactive filtering.
- */
-export const Projects = () => {
-  // --- State & Filtering ---
-  const [activeFilter, setActiveFilter] = useState('all');
+// --- Sub-Components ---
 
-  // Derive filtered list based on active category or technology
-  const filteredProjects = projectData.filter(p =>
-    activeFilter === 'all' ? true : p.category === activeFilter || p.tech.some(t => t.toLowerCase().includes(activeFilter))
-  );
+const ProjectModal = ({ project, isOpen, onClose }: { project: Project; isOpen: boolean; onClose: () => void }) => {
+  useEffect(() => {
+    if (isOpen) document.body.style.overflow = 'hidden';
+    else document.body.style.overflow = 'unset';
+    return () => { document.body.style.overflow = 'unset'; };
+  }, [isOpen]);
 
   return (
-    <section id="projects" className="py-32 px-4 relative bg-transparent">
-      <div className="max-w-7xl mx-auto space-y-20">
+    <AnimatePresence>
+      {isOpen && (
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4 md:p-8">
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="absolute inset-0 bg-[#0b0f17]/90 backdrop-blur-2xl"
+          />
+          
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="relative w-full max-w-5xl max-h-[90vh] bg-zinc-900 border border-white/10 rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col md:flex-row"
+          >
+            {/* Visual Side */}
+            <div className="md:w-1/2 h-64 md:h-auto overflow-hidden">
+               <img src={project.image} alt={project.title} className="w-full h-full object-cover" />
+            </div>
 
-        {/* Header Area & Filter Controls */}
-        <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10">
-          <div className="space-y-6 max-w-2xl text-left">
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-600/10 border border-orange-500/20 text-[10px] font-black text-orange-500 uppercase tracking-[0.2em]"
+            {/* Content Side */}
+            <div className="md:w-1/2 p-8 md:p-14 overflow-y-auto space-y-10 custom-scrollbar">
+              <div className="flex justify-between items-start">
+                <div className="space-y-2">
+                  <h3 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter leading-none">{project.title}</h3>
+                  <p className="text-orange-500 font-black text-[10px] uppercase tracking-widest">{project.architecture}</p>
+                </div>
+                <button onClick={onClose} className="p-3 bg-white/5 hover:bg-white/10 rounded-2xl text-zinc-400 hover:text-white transition-all">
+                  <X size={20} />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="p-4 bg-zinc-950/50 rounded-2xl border border-white/5">
+                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Role</p>
+                    <p className="text-sm font-bold text-white">{project.role}</p>
+                  </div>
+                  <div className="p-4 bg-zinc-950/50 rounded-2xl border border-white/5">
+                    <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest mb-1">Complexity</p>
+                    <p className="text-sm font-bold text-white">Full-Stack Architecture</p>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-start gap-4">
+                    <div className="p-2 bg-red-500/10 rounded-lg text-red-500"><Target size={16} /></div>
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">The Challenge</p>
+                      <p className="text-sm text-zinc-300 leading-relaxed">{project.challenge}</p>
+                    </div>
+                  </div>
+                  <div className="flex items-start gap-4">
+                    <div className="p-2 bg-green-500/10 rounded-lg text-green-500"><CheckCircle2 size={16} /></div>
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Engineering Solution</p>
+                      <p className="text-sm text-zinc-300 leading-relaxed">{project.solution}</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="space-y-3">
+                   <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Key Features</p>
+                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      {project.features.map(f => (
+                        <div key={f.text} className="flex items-center gap-2 text-xs text-zinc-400 font-semibold">
+                          <span className="text-base">{f.icon}</span>
+                          {f.text}
+                        </div>
+                      ))}
+                   </div>
+                </div>
+
+                <div className="grid grid-cols-3 gap-2 py-6 border-y border-white/5">
+                  {project.metrics.map(m => (
+                    <div key={m} className="text-center">
+                       <p className="text-zinc-500 text-[8px] font-black uppercase tracking-tighter">Metric</p>
+                       <p className="text-white text-[10px] font-black">{m}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div className="flex items-center gap-4 pt-4">
+                <a href={project.github} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 py-4 bg-zinc-800 hover:bg-zinc-700 text-white rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest">
+                  <Github size={18} /> Source Code
+                </a>
+                <a href={project.link} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 py-4 bg-orange-600 hover:bg-orange-500 text-white rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest shadow-xl shadow-orange-600/20">
+                   Live Demo
+                </a>
+              </div>
+            </div>
+          </motion.div>
+        </div>
+      )}
+    </AnimatePresence>
+  );
+};
+
+const ProjectImage = ({ project, isFeatured }: { project: Project; isFeatured: boolean }) => {
+  const x = useMotionValue(0);
+  const y = useMotionValue(0);
+
+  const mouseXSpring = useSpring(x);
+  const mouseYSpring = useSpring(y);
+
+  const rotateX = useTransform(mouseYSpring, [-0.5, 0.5], ["10deg", "-10deg"]);
+  const rotateY = useTransform(mouseXSpring, [-0.5, 0.5], ["-10deg", "10deg"]);
+
+  const handleMouseMove = (e: MouseEvent<HTMLDivElement>) => {
+    const rect = e.currentTarget.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseX = e.clientX - rect.left;
+    const mouseY = e.clientY - rect.top;
+    const xPct = mouseX / width - 0.5;
+    const yPct = mouseY / height - 0.5;
+    x.set(xPct);
+    y.set(yPct);
+  };
+
+  const handleMouseLeave = () => {
+    x.set(0);
+    y.set(0);
+  };
+
+  return (
+    <div 
+      className={cn(
+        "relative group/img",
+        isFeatured ? "aspect-[16/6] md:aspect-[16/8]" : "aspect-[16/10]"
+      )}
+      style={{ perspective: "1200px" }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    >
+      <motion.div
+        style={{ 
+          rotateX, 
+          rotateY, 
+          transformStyle: "preserve-3d" 
+        }}
+        className="relative w-full h-full rounded-[2.5rem] overflow-hidden bg-zinc-900 shadow-2xl" 
+      >
+        <motion.img
+          src={project.image}
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110"
+          style={{ transform: "translateZ(40px)" }}
+        />
+        
+        {/* Dribbble Style Overlay */}
+        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 backdrop-blur-sm flex flex-col items-center justify-center gap-4 z-20">
+            <motion.a 
+                href={project.link} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                className="px-8 py-3 bg-white text-black font-black text-xs uppercase tracking-widest rounded-full hover:bg-orange-500 hover:text-white transition-all transform hover:scale-105"
             >
-              <span className="w-1.5 h-1.5 rounded-full bg-orange-500 animate-pulse" />
-              Full-Stack MERN Expert
-            </motion.div>
-            <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-none">
-              Project <span className="text-orange-500">Gallery</span>
+                Live Preview
+            </motion.a>
+            <motion.a 
+                href={project.github} 
+                target="_blank" 
+                rel="noopener noreferrer"
+                initial={{ y: 20, opacity: 0 }}
+                whileInView={{ y: 0, opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                className="px-8 py-3 bg-white/10 text-white font-black text-xs uppercase tracking-widest rounded-full hover:bg-white/20 transition-all backdrop-blur-md transform hover:scale-105 border border-white/20"
+            >
+                Source Code
+            </motion.a>
+        </div>
+
+        <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-[#0b0f17]/20 to-transparent opacity-60" />
+        
+        {isFeatured && (
+          <div className="absolute top-6 left-6 p-0.5 bg-gradient-to-r from-orange-500 to-orange-400 rounded-xl z-30" style={{ transform: "translateZ(60px)" }}>
+            <div className="px-3 py-1.5 bg-[#0b0f17]/80 backdrop-blur-md rounded-[10px] flex items-center gap-2">
+              <Trophy size={12} className="text-orange-500" />
+              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white">Featured Project</span>
+            </div>
+          </div>
+        )}
+      </motion.div>
+    </div>
+  );
+};
+
+// --- Main Component ---
+
+export const Projects = () => {
+  const [activeFilter, setActiveFilter] = useState('all');
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
+
+  const filteredProjects = projectData.filter(p =>
+    activeFilter === 'all' ? true : p.category === activeFilter
+  );
+
+  const featuredProject = filteredProjects.find(p => p.isFeatured);
+  const otherProjects = filteredProjects.filter(p => !p.isFeatured);
+
+  return (
+    <section id="projects" className="py-40 px-4 relative bg-[#0b0f17] overflow-hidden">
+      {/* Premium Section Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+         <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 blur-[120px] rounded-full" />
+      </div>
+
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+      
+      <div className="max-w-6xl mx-auto space-y-32 relative z-10">
+
+        {/* Header - Global Selection */}
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-12">
+          <div className="space-y-6">
+            <h2 className="text-7xl md:text-9xl font-black text-white uppercase tracking-tighter leading-none">
+                Selected <span className="text-orange-500">Work</span>
             </h2>
-            <p className="text-zinc-500 font-semibold text-sm md:text-base leading-relaxed tracking-tight max-w-xl">
-              A showcase of high-performance full-stack applications. Leveraging the power of MongoDB, Express, React, and Node.js to build scalable digital solutions.
+            <p className="text-zinc-500 font-bold text-sm md:text-xl leading-relaxed tracking-tight max-w-xl">
+               Real-world applications built with performance and scalability in mind.
             </p>
           </div>
 
-          {/* Dynamic Filter Pills */}
-          <div className="p-2 bg-zinc-900/40 border border-white/5 rounded-2xl flex flex-wrap gap-2 shadow-2xl backdrop-blur-md">
+          {/* Minimalist Filter */}
+          <div className="flex gap-4">
             {filters.map((f) => (
               <button
                 key={f.value}
                 onClick={() => setActiveFilter(f.value)}
                 className={cn(
-                  "px-6 py-2.5 rounded-xl text-[10px] font-black uppercase tracking-widest transition-all duration-300",
-                  activeFilter === f.value
-                    ? "bg-orange-600 text-white shadow-xl shadow-orange-600/20"
-                    : "text-zinc-500 hover:text-white hover:bg-white/5"
+                  "text-[10px] font-black uppercase tracking-[0.3em] transition-all",
+                  activeFilter === f.value ? "text-orange-500" : "text-zinc-600 hover:text-zinc-300"
                 )}
               >
                 {f.name}
@@ -108,153 +390,155 @@ export const Projects = () => {
           </div>
         </div>
 
-        {/* Project Display Grid */}
-        <motion.div
-          layout
-          className="grid grid-cols-1 md:grid-cols-2 gap-8 lg:gap-12"
-        >
-          <AnimatePresence mode="popLayout">
-            {filteredProjects.map((project, idx) => (
-              <motion.div
-                key={project.id}
-                layout
-                initial={{ opacity: 0, y: 40 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.6, delay: idx * 0.1 }}
-                whileHover={{ y: -10 }}
-                className="group relative bg-zinc-900/30 border border-white/5 rounded-[3rem] overflow-hidden shadow-2xl hover:border-orange-500/20 transition-all duration-500 flex flex-col"
-              >
-                {/* Visual Asset Layer */}
-                <div className="relative aspect-[16/10] overflow-hidden">
-                  <img
-                    src={project.image}
-                    alt={project.title}
-                    className="w-full h-full object-cover transition-transform duration-1000 group-hover:scale-110 grayscale-[0.2] group-hover:grayscale-0"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-transparent to-transparent opacity-90" />
+        {/* Content Hierarchy */}
+        <div className="space-y-24">
+          {/* 1. DOMINANT FEATURED PROJECT */}
+          {featuredProject && (
+            <motion.div
+              layout
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="group cursor-pointer space-y-12"
+              onClick={() => setSelectedProject(featuredProject)}
+            >
+                <ProjectImage project={featuredProject} isFeatured={true} />
+                
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 px-4">
+                   <div className="lg:col-span-7 space-y-8">
+                      <div className="space-y-3">
+                        <div className="flex items-center gap-4">
+                           <h3 className="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter group-hover:text-orange-500 transition-colors">{featuredProject.title}</h3>
+                           <div className="px-4 py-1.5 bg-orange-600/10 border border-orange-500/20 rounded-full text-[10px] font-black text-orange-500 uppercase tracking-widest">{featuredProject.metrics_short}</div>
+                        </div>
+                        <p className="text-zinc-400 font-bold text-xl md:text-3xl tracking-tight leading-tight">{featuredProject.shortDesc}</p>
+                      </div>
 
-                  {/* Experimental Indicator Indicator */}
-                  {project.isExperimental && (
-                    <div className="absolute top-6 right-6 px-4 py-1.5 bg-zinc-900/80 backdrop-blur-md border border-orange-500/30 rounded-full flex items-center gap-2">
-                      <Sparkles size={10} className="text-orange-500" />
-                      <span className="text-[10px] font-black uppercase tracking-widest text-orange-500">Experimental</span>
-                    </div>
-                  )}
+                      {/* Problem/Solution Logic */}
+                      <div className="grid grid-cols-2 gap-8 border-l border-white/5 pl-8">
+                         <div className="space-y-2">
+                             <p className="text-[10px] font-black text-red-500 uppercase tracking-widest flex items-center gap-2 underline decoration-red-500/20">Problem</p>
+                             <p className="text-sm text-zinc-500 font-medium leading-relaxed">{featuredProject.problem}</p>
+                         </div>
+                         <div className="space-y-2">
+                             <p className="text-[10px] font-black text-green-500 uppercase tracking-widest flex items-center gap-2 underline decoration-green-500/20">Solution</p>
+                             <p className="text-sm text-zinc-300 font-medium leading-relaxed">{featuredProject.solution_short}</p>
+                         </div>
+                      </div>
+                   </div>
+
+                   <div className="lg:col-span-5 space-y-10">
+                      <div className="space-y-4">
+                         <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em]">Key Features</p>
+                         <div className="flex flex-wrap gap-4">
+                            {featuredProject.features.map(f => (
+                              <div key={f.text} className="flex items-center gap-3 px-5 py-3 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all">
+                                 <span className="text-xl">{f.icon}</span>
+                                 <span className="text-[10px] font-black text-zinc-300 uppercase tracking-widest">{f.text}</span>
+                              </div>
+                            ))}
+                         </div>
+                      </div>
+
+                      <div className="space-y-4">
+                         <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em]">Stack & Logic</p>
+                         <div className="flex flex-wrap gap-3">
+                            {featuredProject.tech.map(t => (
+                              <div key={t.name} className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-white/5 rounded-xl">
+                                 <span className="text-sm">{t.icon}</span>
+                                 <span className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">{t.name}</span>
+                              </div>
+                            ))}
+                            <div className="px-4 py-2 border border-orange-500/20 rounded-xl text-[9px] font-black text-orange-500 uppercase tracking-widest">
+                               {featuredProject.complexity}
+                            </div>
+                         </div>
+                      </div>
+                   </div>
                 </div>
+            </motion.div>
+          )}
 
-                {/* Information Layer */}
-                <div className="p-10 space-y-6 flex-1 flex flex-col">
-                  <div className="space-y-4">
-                    <h3 className="text-3xl font-black text-white uppercase tracking-tighter leading-none group-hover:text-orange-500 transition-colors">
-                      {project.title}
-                    </h3>
-                    <p className="text-zinc-500 font-semibold text-sm leading-relaxed tracking-tight line-clamp-2">
-                      {project.description}
-                    </p>
-                  </div>
-
-                  {/* Technical Profile Tags */}
-                  <div className="flex flex-wrap gap-2.5">
-                    {project.tech.map((t) => (
-                      <span key={t} className="px-4 py-1.5 bg-orange-600/5 border border-orange-500/10 rounded-xl text-[10px] font-black text-orange-500 uppercase tracking-widest">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Card Actions Area */}
-                  <div className="pt-6 mt-auto border-t border-white/5 flex items-center justify-between">
-                    <div className="flex items-center gap-4">
-                      {/* Source/Preview Quick Links */}
-                      <Magnetic>
-                        <a
-                          href={project.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-12 h-12 flex items-center justify-center bg-zinc-900/50 border border-white/5 rounded-2xl text-zinc-500 hover:text-white hover:border-white/10 transition-all shadow-xl"
-                          aria-label="View Source on GitHub"
-                        >
-                          <Github size={18} />
-                        </a>
-                      </Magnetic>
-                      <Magnetic>
-                        <a
-                          href={project.link}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-12 h-12 flex items-center justify-center bg-zinc-900/50 border border-white/5 rounded-2xl text-zinc-500 hover:text-white hover:border-white/10 transition-all shadow-xl"
-                          aria-label="Live Demo"
-                        >
-                          <Globe size={18} />
-                        </a>
-                      </Magnetic>
+          {/* 2. PROJECT GRID AREA */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 pt-12">
+            <AnimatePresence mode="popLayout">
+              {otherProjects.map((project, idx) => (
+                <motion.div
+                  key={project.id}
+                  layout
+                  initial={{ opacity: 0, y: 30 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  exit={{ opacity: 0, scale: 0.95 }}
+                  whileHover={{ y: -6 }}
+                  transition={{ duration: 0.8, delay: idx * 0.1 }}
+                  className="group cursor-pointer flex flex-col gap-10 p-6 rounded-[3rem] border border-transparent hover:border-orange-500/20 hover:bg-white/[0.02] transition-all"
+                  onClick={() => setSelectedProject(project)}
+                >
+                  <ProjectImage project={project} isFeatured={false} />
+                  
+                  <div className="space-y-6 px-4">
+                    <div className="space-y-1">
+                      <div className="flex justify-between items-center">
+                        <h4 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter group-hover:text-orange-500 transition-colors">{project.title}</h4>
+                        <div className="p-3 bg-white/5 border border-white/5 rounded-2xl text-zinc-600 group-hover:text-white transition-all shadow-xl">
+                           <ArrowUpRight size={20} />
+                        </div>
+                      </div>
+                      <p className="text-orange-500 text-[9px] font-black uppercase tracking-[0.3em]">{project.metrics_short}</p>
                     </div>
 
-                    {/* Primary Engagement Button */}
-                    <Magnetic>
-                      <a
-                        href={project.link}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center gap-4 px-8 py-4 bg-orange-600 hover:bg-orange-500 text-white font-black rounded-[2rem] text-xs uppercase tracking-[0.2em] shadow-xl shadow-orange-600/20 transition-all group/btn"
-                      >
-                        View Project
-                        <ArrowUpRight size={16} className="group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-                      </a>
-                    </Magnetic>
+                    <p className="text-zinc-400 font-bold text-sm tracking-tight line-clamp-2 md:line-clamp-none">{project.shortDesc}</p>
+                    
+                    {/* Tiny Problem/Solution Context */}
+                    <div className="space-y-3 py-4 border-y border-white/5">
+                        <div className="flex gap-4">
+                           <span className="text-[8px] font-black text-red-500/60 uppercase tracking-widest w-12 pt-1">Problem</span>
+                           <p className="text-[11px] text-zinc-500 font-medium leading-relaxed flex-1">{project.problem}</p>
+                        </div>
+                        <div className="flex gap-4">
+                           <span className="text-[8px] font-black text-green-500/60 uppercase tracking-widest w-12 pt-1">Solution</span>
+                           <p className="text-[11px] text-zinc-300 font-medium leading-relaxed flex-1">{project.solution_short}</p>
+                        </div>
+                    </div>
+
+                    <div className="flex flex-wrap items-center justify-between gap-4">
+                        <div className="flex flex-wrap gap-3">
+                           {project.tech.map(t => (
+                             <div key={t.name} className="flex items-center gap-1">
+                                <span className="text-xs">{t.icon}</span>
+                                <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">{t.name}</span>
+                             </div>
+                           ))}
+                        </div>
+                        <span className="text-[8px] font-black text-orange-500/60 uppercase tracking-widest">{project.complexity}</span>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </AnimatePresence>
-        </motion.div>
-
-        {/* Global CTA Section */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          className="relative p-12 md:p-20 bg-zinc-900/20 border border-white/5 border-dashed rounded-[4rem] text-center space-y-10 overflow-hidden"
-        >
-          {/* Decorative Elements */}
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2 flex gap-4">
-            {[...Array(3)].map((_, i) => (
-              <div key={i} className="w-1.5 h-1.5 rounded-full bg-orange-500/30" />
-            ))}
+                </motion.div>
+              ))}
+            </AnimatePresence>
           </div>
+        </div>
 
-          <div className="space-y-4 max-w-2xl mx-auto">
-            <h4 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter">Want to see more?</h4>
-            <p className="text-zinc-500 font-semibold leading-relaxed tracking-tight text-sm">
-              I have several other repositories including open-source contributions and technical experiments available on GitHub. Let's build something exceptional together.
-            </p>
-          </div>
+        {/* Details Modal */}
+        {selectedProject && (
+          <ProjectModal 
+            project={selectedProject} 
+            isOpen={!!selectedProject} 
+            onClose={() => setSelectedProject(null)} 
+          />
+        )}
 
-          <div className="flex flex-wrap justify-center gap-6">
-            <Magnetic>
-              <a
-                href="https://github.com/Vinay-Budde"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-4 px-10 py-5 bg-zinc-900/50 border border-white/5 rounded-[2rem] text-white font-black text-xs uppercase tracking-[0.2em] hover:bg-zinc-800 transition-all"
-              >
-                <Github size={18} />
-                Github Archive
-              </a>
-            </Magnetic>
-            <Magnetic>
-              <a
-                href="#contact"
-                className="flex items-center gap-4 px-10 py-5 bg-orange-600 hover:bg-orange-500 text-white font-black rounded-[2rem] text-xs uppercase tracking-[0.2em] shadow-xl shadow-orange-600/20 transition-all"
-              >
-                Request Case Study
-              </a>
-            </Magnetic>
-          </div>
-        </motion.div>
+        {/* Final Archive CTA */}
+        <div className="text-center pt-20">
+            <a href="https://github.com/Vinay-Budde" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 px-12 py-6 bg-zinc-900 border border-white/5 text-white font-black text-xs uppercase tracking-[0.4em] hover:bg-orange-500 transition-all rounded-3xl shadow-2xl">
+               <Github size={20} />
+               Explore Full Archive
+            </a>
+        </div>
 
       </div>
     </section>
   );
 };
+
+

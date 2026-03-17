@@ -3,82 +3,99 @@ import {
   Terminal, 
   Layout, 
   Server, 
-  Cpu, 
   ShieldCheck,
   Code2,
   Globe,
-  GitBranch,
   Github,
-  Monitor,
-  Cloud,
   Layers,
   Zap,
-  Brain
+  Brain,
+  Database,
+  Workflow,
+  Lock,
+  Maximize2,
+  Package,
+  Boxes,
+  Activity,
+  AppWindow
 } from 'lucide-react';
-const TriangleIcon = ({ size }: { size: number }) => (
-  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <path d="M12 4L2 20H22L12 4Z" fill="currentColor" />
-  </svg>
+
+const SkillLevel = ({ level }: { level: number }) => (
+  <div className="flex gap-0.5 ml-auto">
+    {[...Array(5)].map((_, i) => (
+      <div 
+        key={i} 
+        className={`w-1.5 h-1.5 rounded-full ${i < level ? 'bg-orange-500 shadow-[0_0_5_px_rgba(234,88,12,0.5)]' : 'bg-zinc-800'}`} 
+      />
+    ))}
+  </div>
 );
 
 const skillCategories = [
   {
-    title: "Programming Languages",
-    icon: Terminal,
-    color: "bg-blue-600/20 text-blue-500",
-    skills: [
-      { name: "C++", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
-      { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
-      { name: "Java", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
-      { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" }
-    ]
-  },
-  {
-    title: "Frontend",
+    title: "Modern Frontend",
     icon: Layout,
-    color: "bg-purple-600/20 text-purple-500",
+    color: "bg-blue-600/20 text-blue-500",
+    projects: "Used in Clean India, Logic Grid",
     skills: [
-      { name: "React.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-      { name: "Tailwind CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
-      { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
-      { name: "HTML/CSS", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/html5/html5-original.svg" },
-      { name: "Responsive Design", icon: Monitor }
+      { name: "React.js", level: 5, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
+      { name: "Next.js", level: 4, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
+      { name: "TypeScript", level: 4, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
+      { name: "Framer Motion", level: 4, icon: Activity },
+      { name: "Tailwind CSS", level: 5, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
+      { name: "Optimization", level: 4, icon: Maximize2 }
     ]
   },
   {
-    title: "Backend",
+    title: "Scalable Backend",
     icon: Server,
     color: "bg-green-600/20 text-green-500",
+    projects: "Used in Student Manager, Clean India",
     skills: [
-      { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
-      { name: "Express.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
-      { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
-      { name: "REST APIs", icon: Globe },
-      { name: "JWT Auth", icon: ShieldCheck }
+      { name: "Node.js", level: 5, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
+      { name: "Express.js", level: 5, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/express/express-original.svg" },
+      { name: "MVC / Middleware", level: 4, icon: Boxes },
+      { name: "JWT / API Security", level: 4, icon: Lock },
+      { name: "REST APIs", level: 5, icon: Globe },
+      { name: "System Design", level: 4, icon: Workflow }
     ]
   },
   {
-    title: "Tools & Platforms",
-    icon: Cpu,
+    title: "Data Persistence",
+    icon: Database,
+    color: "bg-purple-600/20 text-purple-500",
+    projects: "Used in Cloud Analytics Dashboard",
+    skills: [
+      { name: "NoSQL: MongoDB", level: 5, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
+      { name: "Relational: SQL", level: 4, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/postgresql/postgresql-original.svg" },
+      { name: "Caching: Redis", level: 3, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/redis/redis-original.svg" },
+      { name: "PostgreSQL", level: 4, icon: Database }
+    ]
+  },
+  {
+    title: "Languages & Tools",
+    icon: Terminal,
     color: "bg-orange-600/20 text-orange-500",
+    projects: "Used across all repositories",
     skills: [
-      { name: "Git", icon: GitBranch },
-      { name: "GitHub", icon: Github },
-      { name: "VS Code", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vscode/vscode-original.svg" },
-      { name: "Vercel", icon: TriangleIcon },
-      { name: "Cloudinary", icon: Cloud }
+      { name: "JavaScript", level: 5, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
+      { name: "Python", level: 4, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
+      { name: "Docker", level: 3, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/docker/docker-original.svg" },
+      { name: "Git / GitHub", level: 5, icon: Github },
+      { name: "Postman", level: 5, icon: AppWindow }
     ]
   },
   {
-    title: "Core Concepts",
+    title: "CS Fundamentals",
     icon: ShieldCheck,
     color: "bg-pink-600/20 text-pink-500",
+    projects: "Core of logic grid & DSA solutions",
     skills: [
-      { name: "Data Structures", icon: Layers },
-      { name: "Algorithms", icon: Zap },
-      { name: "OOP", icon: Brain },
-      { name: "Problem Solving", icon: Code2 },
-      { name: "System Design", icon: Server }
+      { name: "Data Structures", level: 5, icon: Layers },
+      { name: "Algorithms", level: 5, icon: Zap },
+      { name: "OOP Principles", level: 4, icon: Brain },
+      { name: "Debugging", level: 5, icon: Code2 },
+      { name: "Unit Testing", level: 4, icon: ShieldCheck }
     ]
   }
 ];
@@ -88,91 +105,113 @@ const bottomRibbon = [
   { name: "Node.js", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nodejs/nodejs-original.svg" },
   { name: "MongoDB", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/mongodb/mongodb-original.svg" },
   { name: "JavaScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
-  { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
-  { name: "Python", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
-  { name: "Java", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/java/java-original.svg" },
-  { name: "C++", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/cplusplus/cplusplus-original.svg" },
-  { name: "Git", icon: GitBranch },
-  { name: "GitHub", icon: Github }
+  { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" }
 ];
 
 /**
  * TechStack Component
- * Displays the developer's technical arsenal categorized by domain.
- * Features a modern grid layout and a scrolling tech ribbon.
+ * Highly detailed technical arsenal with depth indicators and project mapping.
  */
 export const TechStack = () => {
   return (
     <section id="skills" className="py-32 px-4 relative overflow-hidden bg-transparent">
+      {/* Premium Visual Elements */}
+      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-600/5 blur-[150px] rounded-full pointer-events-none animate-pulse" />
+      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/5 blur-[150px] rounded-full pointer-events-none" />
+      
       <div className="max-w-7xl mx-auto space-y-24">
 
-        {/* Header: Section Context */}
-        <div className="text-center space-y-4">
+        {/* Header Section */}
+        <div className="text-center space-y-4 max-w-3xl mx-auto">
           <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0, y: 10 }}
+            whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="inline-flex items-center px-3 py-1 rounded-full bg-orange-600/10 border border-orange-500/20 text-[9px] font-black text-orange-500 uppercase tracking-[0.2em]"
+            className="inline-flex items-center px-4 py-1.5 rounded-full bg-orange-600/10 border border-orange-500/20 text-[10px] font-black text-orange-500 uppercase tracking-[0.3em] shadow-lg shadow-orange-500/5"
           >
-            Capabilities
+            Domain Expertise
           </motion.div>
-          <h2 className="text-4xl md:text-6xl font-black text-white uppercase tracking-tighter">
-            Technical <span className="text-orange-500">Universe</span>
+          <h2 className="text-5xl md:text-7xl font-black text-white uppercase tracking-tighter leading-tight">
+            Technical <span className="text-orange-500">Infrastructure</span>
           </h2>
+          <p className="text-zinc-500 font-semibold text-sm md:text-base tracking-tight">
+            A comprehensive mapping of my specialized skills, categorized by domain and proven through real-world implementation.
+          </p>
         </div>
 
-        {/* Categorical Grid: Domain-specific Skills */}
+        {/* Enhanced Skill Matrix */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {skillCategories.map((category, index) => (
             <motion.div
               key={category.title}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1 }}
+              transition={{ delay: index * 0.1, duration: 0.5 }}
               viewport={{ once: true }}
-              className="p-8 bg-zinc-900/30 border border-white/5 rounded-[2.5rem] space-y-8 hover:border-orange-500/20 transition-all shadow-2xl"
+              whileHover={{ y: -12, scale: 1.02 }}
+              className="p-8 bg-zinc-900/40 border border-white/5 rounded-[3rem] space-y-10 hover:border-orange-500/30 transition-all duration-500 shadow-2xl group relative overflow-hidden"
             >
-              {/* Category Identity */}
-              <div className="flex items-center gap-4">
-                <div className={`p-4 rounded-2xl ${category.color}`}>
-                  <category.icon size={28} />
+              {/* Card Decoration */}
+              <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-600/5 rounded-full blur-3xl transition-opacity group-hover:opacity-100 opacity-0" />
+
+              {/* Identity & Context */}
+              <div className="space-y-4">
+                <div className="flex items-center gap-5">
+                  <div className={`p-4 rounded-[1.5rem] ${category.color} shadow-lg transition-transform group-hover:scale-110 duration-500`}>
+                    <category.icon size={32} />
+                  </div>
+                  <h3 className="text-2xl font-black text-white tracking-tighter leading-none">
+                    {category.title}
+                  </h3>
                 </div>
-                <h3 className="text-xl font-black text-white tracking-tight leading-none">
-                  {category.title}
-                </h3>
+                {/* Project Badge */}
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-950/80 border border-white/5 rounded-lg text-[9px] font-bold text-zinc-500 uppercase tracking-widest whitespace-nowrap">
+                   <Package size={10} className="text-orange-500" />
+                   {category.projects}
+                </div>
               </div>
 
-              {/* Skill Tag Cloud */}
-              <div className="flex flex-wrap gap-3">
+              {/* Advanced Skill Grid */}
+              <div className="grid grid-cols-1 gap-3">
                 {category.skills.map((skill) => (
-                  <div 
+                  <motion.div 
                     key={skill.name}
-                    className="flex items-center gap-2 px-4 py-2 bg-zinc-900/50 border border-white/5 rounded-xl text-xs font-bold text-zinc-400 hover:text-white hover:border-white/20 transition-all"
+                    initial={{ opacity: 0, x: -10 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    className="flex items-center gap-3 px-5 py-3 bg-zinc-950/40 border border-white/5 rounded-2xl group/skill hover:bg-zinc-950 transition-all duration-300"
                   >
                     {typeof skill.icon === 'string' ? (
                       <img 
                         src={skill.icon} 
                         alt={skill.name} 
-                        className="w-4 h-4 grayscale opacity-70 group-hover:grayscale-0 group-hover:opacity-100 transition-all" 
+                        className="w-5 h-5 grayscale opacity-60 group-hover/skill:grayscale-0 group-hover/skill:opacity-100 transition-all" 
                       />
                     ) : (
-                      <skill.icon size={14} className="opacity-70" />
+                      <skill.icon size={16} className="text-zinc-600 group-hover/skill:text-orange-500 transition-colors" />
                     )}
-                    <span className="whitespace-nowrap">{skill.name}</span>
-                  </div>
+                    <span className="text-xs font-bold text-zinc-400 group-hover/skill:text-white transition-colors tracking-tight">
+                      {skill.name}
+                    </span>
+                    <SkillLevel level={skill.level} />
+                  </motion.div>
                 ))}
               </div>
             </motion.div>
           ))}
         </div>
 
-        {/* Bottom Tech Ribbon: Fast Identification Icons */}
-        <div className="pt-20 space-y-12">
-          <div className="text-center">
-            <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.5em]">Technologies & Tools</p>
+        {/* Global Tech Identity Ribbon */}
+        <div className="pt-24 space-y-16">
+          <div className="text-center relative">
+             {/* Divider Element */}
+             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full h-[1px] bg-white/5 z-0" />
+             <p className="relative z-10 inline-block px-10 bg-[#0b0f17] text-[11px] font-black text-zinc-600 uppercase tracking-[0.6em]">
+               Primary Weaponry
+             </p>
           </div>
           
-          <div className="flex flex-wrap justify-center gap-6 md:gap-10">
+          <div className="flex flex-wrap justify-center gap-10 md:gap-16">
             {bottomRibbon.map((tech, i) => (
               <motion.div
                 key={tech.name}
@@ -180,22 +219,20 @@ export const TechStack = () => {
                 whileInView={{ opacity: 1, scale: 1 }}
                 transition={{ delay: i * 0.05 }}
                 viewport={{ once: true }}
-                whileHover={{ y: -10 }}
-                className="flex flex-col items-center gap-4"
+                whileHover={{ y: -15, scale: 1.15 }}
+                className="flex flex-col items-center gap-6 group"
               >
-                {/* Tech Icon Card */}
-                <div className="w-20 h-24 md:w-24 md:h-28 bg-zinc-900/40 border border-white/5 rounded-[2.5rem] flex items-center justify-center p-6 group hover:border-orange-500/30 hover:bg-zinc-900/60 transition-all shadow-xl">
-                  {typeof tech.icon === 'string' ? (
-                    <img 
-                      src={tech.icon} 
-                      alt={tech.name} 
-                      className="w-full h-full object-contain grayscale transition-all group-hover:grayscale-0" 
-                    />
-                  ) : (
-                    <tech.icon size={40} className="text-zinc-500 group-hover:text-orange-500 transition-all" />
-                  )}
+                <div className="w-24 h-28 md:w-28 md:h-32 bg-zinc-900/40 border border-white/5 rounded-[3rem] flex items-center justify-center p-8 hover:border-orange-500/40 hover:bg-zinc-900/60 transition-all duration-500 shadow-2xl relative overflow-hidden">
+                   <div className="absolute inset-0 bg-orange-600/5 opacity-0 group-hover:opacity-100 transition-opacity" />
+                  <img 
+                    src={tech.icon} 
+                    alt={tech.name} 
+                    className="w-full h-full object-contain grayscale opacity-60 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110" 
+                  />
                 </div>
-                <span className="text-[10px] font-black text-zinc-600 uppercase tracking-widest">{tech.name}</span>
+                <span className="text-[10px] font-black text-zinc-600 group-hover:text-orange-500 uppercase tracking-[0.3em] transition-colors">
+                  {tech.name}
+                </span>
               </motion.div>
             ))}
           </div>
@@ -205,3 +242,5 @@ export const TechStack = () => {
     </section>
   );
 };
+
+

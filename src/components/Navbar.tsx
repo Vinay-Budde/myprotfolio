@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { cn } from '../lib/utils';
-import { Monitor, Github, Linkedin } from 'lucide-react';
+import { Monitor, Github, Linkedin, Sparkles } from 'lucide-react';
 import { Magnetic } from './ui/Magnetic';
+import { motion } from 'framer-motion';
 
 /**
  * Global Navigation Component
@@ -10,22 +11,39 @@ import { Magnetic } from './ui/Magnetic';
 export const Navbar = () => {
   // --- State & Interaction ---
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState('home');
 
-  // Monitor scroll position to toggle sticky background
+  // Monitor scroll position to toggle sticky background and active section
   useEffect(() => {
-    const handleScroll = () => setIsScrolled(window.scrollY > 20);
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 20);
+
+      const sections = ['home', 'about', 'skills', 'projects', 'certifications', 'contact'];
+      const scrollPosition = window.scrollY + 100;
+
+      for (const section of sections) {
+        const element = document.getElementById(section);
+        if (element) {
+          const { offsetTop, offsetHeight } = element;
+          if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+            setActiveSection(section);
+          }
+        }
+      }
+    };
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   // Main navigation configuration
   const navLinks = [
-    { name: 'Home', href: '#home' },
-    { name: 'About', href: '#about' },
-    { name: 'Skills', href: '#skills' },
-    { name: 'Projects', href: '#projects' },
-    { name: 'Certifications', href: '#certifications' },
-    { name: 'Contact', href: '#contact' },
+    { name: 'Home', href: '#home', id: 'home' },
+    { name: 'About', href: '#about', id: 'about' },
+    { name: 'Skills', href: '#skills', id: 'skills' },
+    { name: 'Projects', href: '#projects', id: 'projects' },
+    { name: 'Certifications', href: '#certifications', id: 'certifications' },
+    { name: 'Contact', href: '#contact', id: 'contact' },
   ];
 
   return (
@@ -46,23 +64,34 @@ export const Navbar = () => {
         </div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-10">
+        <div className="hidden md:flex items-center gap-12">
           {navLinks.map((link) => (
             <a
               key={link.name}
               href={link.href}
-              className="text-[10px] font-black uppercase tracking-[0.2em] text-zinc-400 hover:text-white transition-colors"
+              className={cn(
+                "text-[10px] font-black uppercase tracking-[0.2em] transition-all relative py-2 group",
+                activeSection === link.id ? "text-orange-500" : "text-zinc-400 hover:text-white"
+              )}
             >
               {link.name}
+              {activeSection === link.id && (
+                <motion.div
+                  layoutId="nav-underline"
+                  className="absolute -bottom-1 left-0 right-0 h-0.5 bg-orange-500"
+                  initial={false}
+                  transition={{ type: "spring", stiffness: 380, damping: 30 }}
+                />
+              )}
             </a>
           ))}
         </div>
 
         {/* Header Actions & Socials */}
-        <div className="flex items-center gap-6">
+        <div className="flex items-center gap-8">
            {/* Direct Social Links */}
            <div className="hidden lg:flex items-center gap-4 border-r border-white/5 pr-6 mr-2">
-              <Magnetic>
+              <Magnetic strength={0.2}>
                 <a 
                   href="https://github.com/Vinay-Budde" 
                   target="_blank" 
@@ -73,7 +102,7 @@ export const Navbar = () => {
                   <Github size={16} />
                 </a>
               </Magnetic>
-              <Magnetic>
+              <Magnetic strength={0.2}>
                 <a 
                   href="https://linkedin.com/in/vinay-budde-bb8a0628a/" 
                   target="_blank" 
@@ -87,21 +116,28 @@ export const Navbar = () => {
            </div>
 
            {/* Call to Actions */}
-           <a 
+           <motion.a 
              href="/vinayresume.pdf" 
              download="Vinay_Budde_Resume.pdf"
+             whileHover={{ scale: 1.05 }}
              className="hidden md:block text-[10px] font-black uppercase tracking-[0.2em] text-orange-500/80 hover:text-orange-500 transition-colors"
            >
               Resume
-           </a>
-           <a 
-             href="#contact" 
-             className="px-8 py-2.5 bg-orange-600 hover:bg-orange-500 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-xl shadow-orange-600/20 transition-all hover:-translate-y-0.5"
-           >
-              Hire Me
-           </a>
+           </motion.a>
+           <Magnetic strength={0.3}>
+             <motion.a 
+               href="#contact" 
+               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(234, 88, 12, 0.4)" }}
+               whileTap={{ scale: 0.95 }}
+               className="px-8 py-3 bg-orange-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-xl shadow-orange-600/20 transition-all flex items-center gap-2 group"
+             >
+                <Sparkles size={12} className="group-hover:rotate-12 transition-transform" />
+                Hire Me
+             </motion.a>
+           </Magnetic>
         </div>
       </div>
     </nav>
   );
 };
+
