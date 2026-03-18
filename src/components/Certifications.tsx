@@ -33,7 +33,7 @@ const certData = [
   {
     title: 'Master Generative AI',
     org: 'DEEPLEARNING.AI',
-    date: 'Issued Feb 2024',
+    date: 'Issued Aug 25',
     icon: Cpu,
     logo: '/assets/masgenai.png', // Using google as proxy for AI
     color: 'bg-[#e9f5f2]',
@@ -81,7 +81,7 @@ export const Certifications = () => {
             Professional Validation
           </motion.div>
           <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-none uppercase">
-            Certifications & <span className="text-orange-500">Achievements</span>
+            Certificates & <span className="text-orange-500">Certifications</span>
           </h2>
           <p className="text-zinc-500 font-semibold text-sm md:text-base leading-relaxed tracking-tight max-w-xl">
             Showcasing a commitment to continuous learning and mastery of emerging technologies in Artificial Intelligence and Cloud Architecture.
