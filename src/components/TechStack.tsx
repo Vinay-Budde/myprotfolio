@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import { 
   Terminal, 
   Layout, 
@@ -108,16 +109,122 @@ const bottomRibbon = [
   { name: "TypeScript", icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" }
 ];
 
+
+// --- Decoration Components ---
+
+const BackgroundGrid = () => (
+  <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
+    <div 
+      className="absolute inset-0 opacity-[0.03]" 
+      style={{
+        backgroundImage: `linear-gradient(to right, #4f4f4f 1px, transparent 1px), linear-gradient(to bottom, #4f4f4f 1px, transparent 1px)`,
+        backgroundSize: '80px 80px',
+        maskImage: 'radial-gradient(circle at center, black, transparent 80%)'
+      }}
+    />
+  </div>
+);
+
+const FloatingParticles = () => {
+  const [particles, setParticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    const p = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      size: Math.random() * 3 + 1,
+      duration: Math.random() * 10 + 10,
+      delay: Math.random() * 5
+    }));
+    setParticles(p);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-orange-500/10 blur-[1px]"
+          animate={{
+            opacity: [0, 0.3, 0],
+            y: [-20, -100, -20],
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            delay: p.delay,
+            ease: "easeInOut"
+          }}
+          style={{
+            left: p.left,
+            top: p.top,
+            width: p.size,
+            height: p.size
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 /**
  * TechStack Component
  * Highly detailed technical arsenal with depth indicators and project mapping.
  */
 export const TechStack = () => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springConfig = { damping: 30, stiffness: 150 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
+
+  const parallaxX = useTransform(smoothMouseX, [0, 1200], [-30, 30]);
+  const parallaxY = useTransform(smoothMouseY, [0, 800], [-30, 30]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    mouseX.set(clientX);
+    mouseY.set(clientY);
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5 }
+    }
+  };
+
   return (
-    <section id="skills" className="py-32 px-4 relative overflow-hidden bg-transparent">
+    <section 
+      id="skills" 
+      onMouseMove={handleMouseMove}
+      className="py-32 px-4 relative overflow-hidden bg-[#0b0f17]"
+    >
+      <BackgroundGrid />
+      <FloatingParticles />
+      
       {/* Premium Visual Elements */}
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-600/5 blur-[150px] rounded-full pointer-events-none animate-pulse" />
-      <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/5 blur-[150px] rounded-full pointer-events-none" />
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+         <motion.div 
+           style={{ x: parallaxX, y: parallaxY }}
+           className="absolute top-0 right-0 w-[500px] h-[500px] bg-orange-600/10 blur-[150px] rounded-full transform-gpu" 
+         />
+         <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600/5 blur-[150px] rounded-full" />
+      </div>
       
       <div className="max-w-7xl mx-auto space-y-24">
 
@@ -140,16 +247,19 @@ export const TechStack = () => {
         </div>
 
         {/* Enhanced Skill Matrix */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {skillCategories.map((category, index) => (
+        <motion.div 
+          variants={containerVariants}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "-100px" }}
+          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8"
+        >
+          {skillCategories.map((category) => (
             <motion.div
               key={category.title}
-              initial={{ opacity: 0, y: 30 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.1, duration: 0.5 }}
-              viewport={{ once: true }}
+              variants={itemVariants}
               whileHover={{ y: -12, scale: 1.02 }}
-              className="p-8 bg-zinc-900/40 border border-white/5 rounded-[3rem] space-y-10 hover:border-orange-500/30 transition-all duration-500 shadow-2xl group relative overflow-hidden"
+              className="p-8 bg-zinc-900/40 border border-white/5 rounded-[3rem] space-y-10 hover:border-orange-500/30 transition-all duration-500 shadow-2xl group relative overflow-hidden transform-gpu"
             >
               {/* Card Decoration */}
               <div className="absolute -top-10 -right-10 w-32 h-32 bg-orange-600/5 rounded-full blur-3xl transition-opacity group-hover:opacity-100 opacity-0" />
@@ -199,7 +309,7 @@ export const TechStack = () => {
               </div>
             </motion.div>
           ))}
-        </div>
+        </motion.div>
 
         {/* Global Tech Identity Ribbon */}
         <div className="pt-24 space-y-16">

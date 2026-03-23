@@ -1,4 +1,5 @@
-import { motion } from 'framer-motion';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
+import { useState, useEffect } from 'react';
 import {
   MapPin,
   Brain,
@@ -34,20 +35,134 @@ const fadeUp = {
   transition: { duration: 0.6 }
 };
 
+
+// --- Decoration Components ---
+
+const BackgroundGrid = () => (
+  <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
+    <div 
+      className="absolute inset-0 opacity-[0.03]" 
+      style={{
+        backgroundImage: `linear-gradient(to right, #4f4f4f 1px, transparent 1px), linear-gradient(to bottom, #4f4f4f 1px, transparent 1px)`,
+        backgroundSize: '80px 80px',
+        maskImage: 'radial-gradient(circle at center, black, transparent 80%)'
+      }}
+    />
+  </div>
+);
+
+const FloatingParticles = () => {
+  const [particles, setParticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    const p = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      size: Math.random() * 3 + 1,
+      duration: Math.random() * 10 + 10,
+      delay: Math.random() * 5
+    }));
+    setParticles(p);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-orange-500/10 blur-[1px]"
+          animate={{
+            opacity: [0, 0.3, 0],
+            y: [-20, -100, -20],
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            delay: p.delay,
+            ease: "easeInOut"
+          }}
+          style={{
+            left: p.left,
+            top: p.top,
+            width: p.size,
+            height: p.size
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 /**
  * About Section Component
  * Detailed professional background, education, and soft skills.
  */
 export const About = () => {
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springConfig = { damping: 30, stiffness: 150 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
+
+  const parallaxX = useTransform(smoothMouseX, [0, 1200], [-30, 30]);
+  const parallaxY = useTransform(smoothMouseY, [0, 800], [-30, 30]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    mouseX.set(clientX);
+    mouseY.set(clientY);
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5 }
+    }
+  };
+
   return (
-    <section id="about" className="py-32 px-4 relative bg-transparent overflow-hidden">
-      <div className="max-w-6xl mx-auto space-y-24">
+    <section 
+      id="about" 
+      onMouseMove={handleMouseMove}
+      className="py-32 px-4 relative bg-[#0b0f17] overflow-hidden"
+    >
+      <BackgroundGrid />
+      <FloatingParticles />
+      
+      {/* Premium Visual Elements */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
+         <motion.div 
+           style={{ x: parallaxX, y: parallaxY }}
+           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 blur-[150px] rounded-full transform-gpu" 
+         />
+      </div>
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-100px" }}
+        className="max-w-6xl mx-auto space-y-24 relative z-10"
+      >
 
         {/* Profile Introduction Grid */}
         <div className="flex flex-col lg:flex-row items-center gap-12 lg:gap-20">
           {/* Avatar Area */}
           <motion.div
-            {...fadeUp}
+            variants={itemVariants}
             className="relative"
           >
             <div className="w-64 h-64 md:w-80 md:h-80 rounded-full border-[12px] border-orange-500/20 p-2 relative shadow-[0_0_50px_rgba(234,88,12,0.1)]">
@@ -86,8 +201,7 @@ export const About = () => {
 
             {/* Profile Metadata (Location & Quick Socials) */}
             <motion.div
-              {...fadeUp}
-              transition={{ delay: 0.3 }}
+              variants={itemVariants}
               className="flex flex-wrap items-center justify-center lg:justify-start gap-6 pt-2"
             >
               <div className="flex items-center gap-2 text-zinc-500 font-bold">
@@ -128,7 +242,7 @@ export const About = () => {
           <div className="lg:col-span-7 space-y-16">
 
             {/* Bio Card */}
-            <motion.section {...fadeUp} className="space-y-8">
+            <motion.section variants={itemVariants} className="space-y-8">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-orange-600/10 rounded-2xl text-orange-500 shadow-lg shadow-orange-500/5">
                   <Terminal size={24} />
@@ -144,7 +258,7 @@ export const About = () => {
             </motion.section>
 
             {/* Academic Journey Timeline */}
-            <motion.section {...fadeUp} className="space-y-8">
+            <motion.section variants={itemVariants} className="space-y-8">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-orange-600/10 rounded-2xl text-orange-500 shadow-lg shadow-orange-500/5">
                   <GraduationCap size={24} />
@@ -191,7 +305,7 @@ export const About = () => {
           <div className="lg:col-span-5 space-y-12">
 
             {/* Interpersonal Strength List */}
-            <motion.section {...fadeUp} className="space-y-6">
+            <motion.section variants={itemVariants} className="space-y-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-orange-600/10 rounded-2xl text-orange-500">
                   <Brain size={24} />
@@ -224,7 +338,7 @@ export const About = () => {
             </motion.section>
 
             {/* Structured Tech Stack Preview */}
-            <motion.section {...fadeUp} className="space-y-6">
+            <motion.section variants={itemVariants} className="space-y-6">
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-orange-600/10 rounded-2xl text-orange-500">
                   <Cpu size={24} />
@@ -249,7 +363,7 @@ export const About = () => {
           </div>
 
         </div>
-      </div>
+      </motion.div>
     </section>
   );
 };

@@ -10,6 +10,65 @@ import {
 import { useState, type MouseEvent, useEffect } from 'react';
 import { cn } from '../lib/utils';
 
+
+// --- Decoration Components ---
+
+const BackgroundGrid = () => (
+  <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
+    <div 
+      className="absolute inset-0 opacity-[0.03]" 
+      style={{
+        backgroundImage: `linear-gradient(to right, #4f4f4f 1px, transparent 1px), linear-gradient(to bottom, #4f4f4f 1px, transparent 1px)`,
+        backgroundSize: '80px 80px',
+        maskImage: 'radial-gradient(circle at center, black, transparent 80%)'
+      }}
+    />
+  </div>
+);
+
+const FloatingParticles = () => {
+  const [particles, setParticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    const p = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      size: Math.random() * 3 + 1,
+      duration: Math.random() * 10 + 10,
+      delay: Math.random() * 5
+    }));
+    setParticles(p);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-orange-500/10 blur-[1px]"
+          animate={{
+            opacity: [0, 0.3, 0],
+            y: [-20, -100, -20],
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            delay: p.delay,
+            ease: "easeInOut"
+          }}
+          style={{
+            left: p.left,
+            top: p.top,
+            width: p.size,
+            height: p.size
+          }}
+        />
+      ))}
+    </div>
+  );
+};
+
 // --- Types & Data ---
 
 interface Project {
@@ -156,10 +215,11 @@ const ProjectModal = ({ project, isOpen, onClose }: { project: Project; isOpen: 
           />
           
           <motion.div
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-5xl max-h-[90vh] bg-zinc-900 border border-white/10 rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col md:flex-row"
+            exit={{ opacity: 0, scale: 0.98, y: 10 }}
+            transition={{ type: "spring", stiffness: 300, damping: 25 }}
+            className="relative w-full max-w-5xl max-h-[90vh] bg-zinc-900 border border-white/10 rounded-[3rem] overflow-hidden shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col md:flex-row transform-gpu"
           >
             {/* Visual Side */}
             <div className="md:w-1/2 h-64 md:h-auto overflow-hidden">
@@ -350,31 +410,82 @@ export const Projects = () => {
   const featuredProject = filteredProjects.find(p => p.isFeatured);
   const otherProjects = filteredProjects.filter(p => !p.isFeatured);
 
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springConfig = { damping: 30, stiffness: 150 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
+
+  const parallaxX = useTransform(smoothMouseX, [0, 1200], [-30, 30]);
+  const parallaxY = useTransform(smoothMouseY, [0, 800], [-30, 30]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    mouseX.set(clientX);
+    mouseY.set(clientY);
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5 }
+    }
+  };
+
   return (
-    <section id="projects" className="py-40 px-4 relative bg-[#0b0f17] overflow-hidden">
+    <section 
+      id="projects" 
+      onMouseMove={handleMouseMove}
+      className="py-40 px-4 relative bg-[#0b0f17] overflow-hidden"
+    >
+      <BackgroundGrid />
+      <FloatingParticles />
+      
       {/* Premium Section Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
          <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 blur-[120px] rounded-full" />
+         <motion.div 
+           style={{ x: parallaxX, y: parallaxY }}
+           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 blur-[120px] rounded-full transform-gpu" 
+         />
       </div>
 
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
       
-      <div className="max-w-6xl mx-auto space-y-32 relative z-10">
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-100px" }}
+        className="max-w-6xl mx-auto space-y-32 relative z-10"
+      >
 
         {/* Header - Global Selection */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12">
-          <div className="space-y-6">
+          <motion.div variants={itemVariants} className="space-y-6">
             <h2 className="text-7xl md:text-9xl font-black text-white uppercase tracking-tighter leading-none">
                 Selected <span className="text-orange-500">Work</span>
             </h2>
             <p className="text-zinc-500 font-bold text-sm md:text-xl leading-relaxed tracking-tight max-w-xl">
                Real-world applications built with performance and scalability in mind.
             </p>
-          </div>
+          </motion.div>
 
           {/* Minimalist Filter */}
-          <div className="flex gap-4">
+          <motion.div variants={itemVariants} className="flex gap-4">
             {filters.map((f) => (
               <button
                 key={f.value}
@@ -387,7 +498,7 @@ export const Projects = () => {
                 {f.name}
               </button>
             ))}
-          </div>
+          </motion.div>
         </div>
 
         {/* Content Hierarchy */}
@@ -396,9 +507,7 @@ export const Projects = () => {
           {featuredProject && (
             <motion.div
               layout
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              variants={itemVariants}
               className="group cursor-pointer space-y-12"
               onClick={() => setSelectedProject(featuredProject)}
             >
@@ -462,16 +571,13 @@ export const Projects = () => {
           {/* 2. PROJECT GRID AREA */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 pt-12">
             <AnimatePresence mode="popLayout">
-              {otherProjects.map((project, idx) => (
+              {otherProjects.map((project) => (
                 <motion.div
                   key={project.id}
                   layout
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, scale: 0.95 }}
+                  variants={itemVariants}
                   whileHover={{ y: -6 }}
-                  transition={{ duration: 0.8, delay: idx * 0.1 }}
-                  className="group cursor-pointer flex flex-col gap-10 p-6 rounded-[3rem] border border-transparent hover:border-orange-500/20 hover:bg-white/[0.02] transition-all"
+                  className="group cursor-pointer flex flex-col gap-10 p-6 rounded-[3rem] border border-transparent hover:border-orange-500/20 hover:bg-white/[0.02] transition-all transform-gpu"
                   onClick={() => setSelectedProject(project)}
                 >
                   <ProjectImage project={project} isFeatured={false} />
@@ -536,7 +642,7 @@ export const Projects = () => {
             </a>
         </div>
 
-      </div>
+      </motion.div>
     </section>
   );
 };

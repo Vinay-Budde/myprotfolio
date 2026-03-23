@@ -54,21 +54,29 @@ export const Navbar = () => {
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         
         {/* Branding / Logo */}
-        <div className="flex items-center gap-3 group cursor-pointer">
+        <motion.div 
+          initial={{ opacity: 0, x: -20 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.5 }}
+          className="flex items-center gap-3 group cursor-pointer"
+        >
            <div className="p-2 bg-orange-600 rounded-lg shadow-lg shadow-orange-600/20 transition-transform group-hover:rotate-12">
               <Monitor size={20} className="text-white" />
            </div>
            <span className="text-xl font-black tracking-tighter text-white uppercase">
               Budde <span className="text-orange-500">Vinay</span>
            </span>
-        </div>
+        </motion.div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center gap-12">
-          {navLinks.map((link) => (
-            <a
+          {navLinks.map((link, i) => (
+            <motion.a
               key={link.name}
               href={link.href}
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
               className={cn(
                 "text-[10px] font-black uppercase tracking-[0.2em] transition-all relative py-2 group",
                 activeSection === link.id ? "text-orange-500" : "text-zinc-400 hover:text-white"
@@ -83,7 +91,7 @@ export const Navbar = () => {
                   transition={{ type: "spring", stiffness: 380, damping: 30 }}
                 />
               )}
-            </a>
+            </motion.a>
           ))}
         </div>
 

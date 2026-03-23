@@ -1,5 +1,5 @@
-import { useState } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect } from 'react';
+import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
 import { 
   Mail, 
   MapPin, 
@@ -12,6 +12,65 @@ import {
   Phone
 } from 'lucide-react';
 import { Magnetic } from './ui/Magnetic';
+
+
+// --- Decoration Components ---
+
+const BackgroundGrid = () => (
+  <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
+    <div 
+      className="absolute inset-0 opacity-[0.03]" 
+      style={{
+        backgroundImage: `linear-gradient(to right, #4f4f4f 1px, transparent 1px), linear-gradient(to bottom, #4f4f4f 1px, transparent 1px)`,
+        backgroundSize: '80px 80px',
+        maskImage: 'radial-gradient(circle at center, black, transparent 80%)'
+      }}
+    />
+  </div>
+);
+
+const FloatingParticles = () => {
+  const [particles, setParticles] = useState<any[]>([]);
+
+  useEffect(() => {
+    const p = Array.from({ length: 15 }).map((_, i) => ({
+      id: i,
+      left: `${Math.random() * 100}%`,
+      top: `${Math.random() * 100}%`,
+      size: Math.random() * 3 + 1,
+      duration: Math.random() * 10 + 10,
+      delay: Math.random() * 5
+    }));
+    setParticles(p);
+  }, []);
+
+  return (
+    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
+      {particles.map((p) => (
+        <motion.div
+          key={p.id}
+          className="absolute rounded-full bg-orange-500/10 blur-[1px]"
+          animate={{
+            opacity: [0, 0.3, 0],
+            y: [-20, -100, -20],
+          }}
+          transition={{
+            duration: p.duration,
+            repeat: Infinity,
+            delay: p.delay,
+            ease: "easeInOut"
+          }}
+          style={{
+            left: p.left,
+            top: p.top,
+            width: p.size,
+            height: p.size
+          }}
+        />
+      ))}
+    </div>
+  );
+};
 
 /**
  * Contact Section Component
@@ -83,29 +142,74 @@ export const Contact = () => {
     }
   };
 
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+  const springConfig = { damping: 30, stiffness: 150 };
+  const smoothMouseX = useSpring(mouseX, springConfig);
+  const smoothMouseY = useSpring(mouseY, springConfig);
+
+  const parallaxX = useTransform(smoothMouseX, [0, 1200], [-30, 30]);
+  const parallaxY = useTransform(smoothMouseY, [0, 800], [-30, 30]);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    const { clientX, clientY } = e;
+    mouseX.set(clientX);
+    mouseY.set(clientY);
+  };
+
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    show: {
+      opacity: 1,
+      transition: {
+        staggerChildren: 0.1,
+        delayChildren: 0.2
+      }
+    }
+  };
+
+  const itemVariants = {
+    hidden: { opacity: 0, y: 20 },
+    show: { 
+      opacity: 1, 
+      y: 0,
+      transition: { duration: 0.5 }
+    }
+  };
+
   return (
-    <section id="contact" className="py-32 px-4 relative overflow-hidden bg-transparent">
+    <section 
+      id="contact" 
+      onMouseMove={handleMouseMove}
+      className="py-32 px-4 relative overflow-hidden bg-[#0b0f17]"
+    >
+      <BackgroundGrid />
+      <FloatingParticles />
       
       {/* Background Aesthetic Atmosphere */}
-      <div className="absolute inset-0 z-0 pointer-events-none">
-        <div className="absolute top-1/2 -left-64 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/5 blur-[120px] rounded-full" />
+      <div className="absolute inset-0 z-0 pointer-events-none opacity-20">
+        <motion.div 
+          style={{ x: parallaxX, y: parallaxY }}
+          className="absolute top-1/2 -left-64 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 blur-[120px] rounded-full transform-gpu" 
+        />
         <div className="absolute bottom-0 -right-32 w-[400px] h-[400px] bg-amber-600/5 blur-[100px] rounded-full" />
       </div>
 
-      <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center relative z-10">
+      <motion.div 
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="show"
+        viewport={{ once: true, margin: "-100px" }}
+        className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-20 items-center relative z-10"
+      >
         
         {/* Left Column: Communication Strategy & Information */}
         <div className="space-y-12">
-          <div className="space-y-6">
+          <motion.div variants={itemVariants} className="space-y-6">
             {/* Context Badge */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true }}
-              className="inline-flex items-center px-4 py-1.5 rounded-full bg-orange-600/10 border border-orange-500/20 text-[10px] font-black text-orange-500 uppercase tracking-[0.2em]"
-            >
+            <div className="inline-flex items-center px-4 py-1.5 rounded-full bg-orange-600/10 border border-orange-500/20 text-[10px] font-black text-orange-500 uppercase tracking-[0.2em]">
               Get in Touch
-            </motion.div>
+            </div>
             
             {/* Primary Heading */}
             <h2 className="text-5xl md:text-7xl font-black text-white tracking-tighter leading-[0.9] uppercase">
@@ -114,10 +218,10 @@ export const Contact = () => {
             <p className="text-zinc-500 font-semibold text-sm md:text-base leading-relaxed tracking-tight max-w-lg">
               I'm currently available for freelance work and full-time positions. If you have a project that needs some creative injection, let's talk.
             </p>
-          </div>
+          </motion.div>
 
           {/* Quick Contact Methods */}
-          <div className="space-y-4">
+          <motion.div variants={itemVariants} className="space-y-4">
              {/* Email Engagement Point */}
              <div className="flex items-center gap-6 p-4 bg-zinc-900/30 border border-white/5 rounded-3xl shadow-2xl hover:border-orange-500/20 transition-all group">
                 <div className="p-4 bg-orange-600/10 rounded-2xl text-orange-500">
@@ -150,10 +254,10 @@ export const Contact = () => {
                   <p className="text-white font-black tracking-tight text-lg">Punjab, India</p>
                 </div>
              </div>
-          </div>
+          </motion.div>
 
           {/* Secondary Social Connections */}
-          <div className="space-y-6 pt-4">
+          <motion.div variants={itemVariants} className="space-y-6 pt-4">
              <p className="text-[10px] font-black text-zinc-500 uppercase tracking-[0.4em]">Social Channels</p>
              <div className="flex flex-wrap gap-4">
                 {/* LinkedIn Connection */}
@@ -185,15 +289,13 @@ export const Contact = () => {
                   </a>
                 </Magnetic>
              </div>
-          </div>
+          </motion.div>
         </div>
 
         {/* Right Column: Interaction Point (Form) */}
         <motion.div
-           initial={{ opacity: 0, x: 30 }}
-           whileInView={{ opacity: 1, x: 0 }}
-           viewport={{ once: true }}
-           className="bg-zinc-900/30 p-10 md:p-14 rounded-[3.5rem] shadow-2xl border border-white/5 backdrop-blur-md"
+           variants={itemVariants}
+           className="bg-zinc-900/30 p-10 md:p-14 rounded-[3.5rem] shadow-2xl border border-white/5 backdrop-blur-md transform-gpu"
         >
           <form className="space-y-8" onSubmit={handleSubmit}>
             {/* Identity Information Pair */}
@@ -321,7 +423,7 @@ export const Contact = () => {
           </form>
         </motion.div>
 
-      </div>
+      </motion.div>
     </section>
   );
 };
