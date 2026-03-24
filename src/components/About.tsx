@@ -1,5 +1,4 @@
 import { motion, useMotionValue, useSpring, useTransform } from 'framer-motion';
-import { useState, useEffect } from 'react';
 import {
   MapPin,
   Brain,
@@ -13,6 +12,7 @@ import {
   Cpu,
   Star
 } from 'lucide-react';
+import { BackgroundGrid, FloatingParticles } from './ui/OptimizedDecorations';
 
 const softSkills = [
   { name: "DSA & Real-world Debugging", icon: Brain, detail: "Solving complex algorithmic problems and debugging production-level code." },
@@ -36,63 +36,7 @@ const fadeUp = {
 };
 
 
-// --- Decoration Components ---
-
-const BackgroundGrid = () => (
-  <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
-    <div 
-      className="absolute inset-0 opacity-[0.03]" 
-      style={{
-        backgroundImage: `linear-gradient(to right, #4f4f4f 1px, transparent 1px), linear-gradient(to bottom, #4f4f4f 1px, transparent 1px)`,
-        backgroundSize: '80px 80px',
-        maskImage: 'radial-gradient(circle at center, black, transparent 80%)'
-      }}
-    />
-  </div>
-);
-
-const FloatingParticles = () => {
-  const [particles, setParticles] = useState<any[]>([]);
-
-  useEffect(() => {
-    const p = Array.from({ length: 15 }).map((_, i) => ({
-      id: i,
-      left: `${Math.random() * 100}%`,
-      top: `${Math.random() * 100}%`,
-      size: Math.random() * 3 + 1,
-      duration: Math.random() * 10 + 10,
-      delay: Math.random() * 5
-    }));
-    setParticles(p);
-  }, []);
-
-  return (
-    <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
-      {particles.map((p) => (
-        <motion.div
-          key={p.id}
-          className="absolute rounded-full bg-orange-500/10 blur-[1px]"
-          animate={{
-            opacity: [0, 0.3, 0],
-            y: [-20, -100, -20],
-          }}
-          transition={{
-            duration: p.duration,
-            repeat: Infinity,
-            delay: p.delay,
-            ease: "easeInOut"
-          }}
-          style={{
-            left: p.left,
-            top: p.top,
-            width: p.size,
-            height: p.size
-          }}
-        />
-      ))}
-    </div>
-  );
-};
+// --- Decoration Components handled by Centralized UI ---
 
 /**
  * About Section Component
@@ -170,7 +114,11 @@ export const About = () => {
                 <img
                   src="/assets/me22.jpeg"
                   alt="Budde Vinay"
-                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110"
+                  loading="lazy"
+                  decoding="async"
+                  width={320}
+                  height={320}
+                  className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-700 group-hover:scale-110 transform-gpu"
                 />
                 <div className="absolute inset-0 bg-orange-600/10 opacity-0 group-hover:opacity-100 transition-opacity" />
               </div>

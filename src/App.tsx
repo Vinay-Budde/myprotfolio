@@ -1,14 +1,18 @@
+import { lazy, Suspense } from 'react';
 import { motion, useScroll, useSpring } from 'framer-motion';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
-import { About } from './components/About';
-import { TechStack } from './components/TechStack';
-import { Projects } from './components/Projects';
-import { Certifications } from './components/Certifications';
-import { Contact } from './components/Contact';
 import { Preloader } from './components/Preloader';
 import { FloatingBackground } from './components/ui/FloatingBackground';
 import { Github, Linkedin } from 'lucide-react';
+
+// Lazy load sections below the fold for performance
+const About = lazy(() => import('./components/About').then(m => ({ default: m.About })));
+const TechStack = lazy(() => import('./components/TechStack').then(m => ({ default: m.TechStack })));
+const Projects = lazy(() => import('./components/Projects').then(m => ({ default: m.Projects })));
+const Certifications = lazy(() => import('./components/Certifications').then(m => ({ default: m.Certifications })));
+const Contact = lazy(() => import('./components/Contact').then(m => ({ default: m.Contact })));
+
 
 /**
  * Main Application Component
@@ -51,12 +55,15 @@ function App() {
         {/* Page Content */}
         <main>
           <Hero />
-          <About />
-          <TechStack />
-          <Projects />
-          <Certifications />
-          <Contact />
+          <Suspense fallback={null}>
+            <About />
+            <TechStack />
+            <Projects />
+            <Certifications />
+            <Contact />
+          </Suspense>
         </main>
+
         
         {/* Global Footer */}
         <footer className="py-20 text-center border-t border-white/5 bg-black/20">
