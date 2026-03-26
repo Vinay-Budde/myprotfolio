@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { cn } from '../lib/utils';
-import { Monitor, Github, Linkedin, Sparkles } from 'lucide-react';
+import { Monitor, Github, Linkedin, Sparkles, Menu, X } from 'lucide-react';
 import { Magnetic } from './ui/Magnetic';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
 /**
  * Global Navigation Component
@@ -12,13 +12,14 @@ export const Navbar = () => {
   // --- State & Interaction ---
   const [isScrolled, setIsScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState('home');
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   // Monitor scroll position to toggle sticky background and active section
   useEffect(() => {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 20);
 
-      const sections = ['home', 'about', 'skills', 'projects', 'certifications', 'contact'];
+      const sections = ['home', 'about', 'skills', 'projects', 'certifications', 'education', 'contact'];
       const scrollPosition = window.scrollY + 100;
 
       for (const section of sections) {
@@ -43,15 +44,17 @@ export const Navbar = () => {
     { name: 'Skills', href: '#skills', id: 'skills' },
     { name: 'Projects', href: '#projects', id: 'projects' },
     { name: 'Certifications', href: '#certifications', id: 'certifications' },
+    { name: 'Education', href: '#education', id: 'education' },
     { name: 'Contact', href: '#contact', id: 'contact' },
   ];
 
   return (
     <nav className={cn(
       "fixed top-0 left-0 right-0 z-[100] transition-all duration-500 py-6 px-6",
-      isScrolled ? "bg-background/80 backdrop-blur-xl border-b border-white/5 py-4" : "bg-transparent"
+      isScrolled ? "bg-background/80 backdrop-blur-xl border-b border-white/5 py-4" : "bg-transparent",
+      isMenuOpen && "bg-background/95 backdrop-blur-2xl border-b border-white/5"
     )}>
-      <div className="max-w-7xl mx-auto flex items-center justify-between">
+      <div className="max-w-6xl mx-auto flex items-center justify-between">
         
         {/* Branding / Logo */}
         <motion.div 
@@ -69,7 +72,7 @@ export const Navbar = () => {
         </motion.div>
 
         {/* Desktop Menu */}
-        <div className="hidden md:flex items-center gap-12">
+        <div className="hidden md:flex items-center gap-5">
           {navLinks.map((link, i) => (
             <motion.a
               key={link.name}
@@ -78,7 +81,7 @@ export const Navbar = () => {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.1 + i * 0.1, duration: 0.5 }}
               className={cn(
-                "text-[10px] font-black uppercase tracking-[0.2em] transition-all relative py-2 group",
+                "text-[10px] font-black uppercase tracking-[0.15em] transition-all relative py-2 group",
                 activeSection === link.id ? "text-orange-500" : "text-zinc-400 hover:text-white"
               )}
             >
@@ -96,7 +99,7 @@ export const Navbar = () => {
         </div>
 
         {/* Header Actions & Socials */}
-        <div className="flex items-center gap-8">
+        <div className="flex items-center gap-5">
            {/* Direct Social Links */}
            <div className="hidden lg:flex items-center gap-4 border-r border-white/5 pr-6 mr-2">
               <Magnetic strength={0.2}>
@@ -128,23 +131,85 @@ export const Navbar = () => {
              href="/vinayresume.pdf" 
              download="Vinay_Budde_Resume.pdf"
              whileHover={{ scale: 1.05 }}
-             className="hidden md:block text-[10px] font-black uppercase tracking-[0.2em] text-orange-500/80 hover:text-orange-500 transition-colors"
+             className="hidden md:block text-[10px] font-black uppercase tracking-[0.15em] text-orange-500/80 hover:text-orange-500 transition-colors"
            >
               Resume
            </motion.a>
-           <Magnetic strength={0.3}>
-             <motion.a 
-               href="#contact" 
-               whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(234, 88, 12, 0.4)" }}
-               whileTap={{ scale: 0.95 }}
-               className="px-8 py-3 bg-orange-600 text-white text-[10px] font-black uppercase tracking-[0.2em] rounded-xl shadow-xl shadow-orange-600/20 transition-all flex items-center gap-2 group"
-             >
-                <Sparkles size={12} className="group-hover:rotate-12 transition-transform" />
-                Hire Me
-             </motion.a>
-           </Magnetic>
-        </div>
+            <Magnetic strength={0.3}>
+              <motion.a 
+                href="#contact" 
+                whileHover={{ scale: 1.05, boxShadow: "0 0 20px rgba(234, 88, 12, 0.4)" }}
+                whileTap={{ scale: 0.95 }}
+                className="px-6 py-2.5 bg-orange-600 text-white text-[10px] font-black uppercase tracking-[0.15em] rounded-xl shadow-xl shadow-orange-600/20 transition-all flex items-center gap-2 group"
+              >
+                 <Sparkles size={12} className="group-hover:rotate-12 transition-transform" />
+                 Hire Me
+              </motion.a>
+            </Magnetic>
+
+            {/* Mobile Menu Trigger */}
+            <motion.button
+              whileTap={{ scale: 0.9 }}
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+              className="md:hidden p-3 bg-white/5 rounded-xl border border-white/10 text-zinc-400 hover:text-white transition-colors"
+            >
+              {isMenuOpen ? <X size={20} /> : <Menu size={20} />}
+            </motion.button>
+         </div>
       </div>
+
+      {/* Mobile Menu Overlay */}
+      <AnimatePresence>
+        {isMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, height: 0 }}
+            animate={{ opacity: 1, height: "auto" }}
+            exit={{ opacity: 0, height: 0 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="md:hidden overflow-hidden border-t border-white/5 bg-black/40 backdrop-blur-3xl"
+          >
+            <div className="p-8 space-y-8">
+              <div className="flex flex-col gap-4">
+                {navLinks.map((link, i) => (
+                  <motion.a
+                    key={link.id}
+                    href={link.href}
+                    initial={{ x: -20, opacity: 0 }}
+                    animate={{ x: 0, opacity: 1 }}
+                    transition={{ delay: i * 0.05 }}
+                    onClick={() => setIsMenuOpen(false)}
+                    className={cn(
+                      "text-2xl font-black uppercase tracking-tighter transition-colors",
+                      activeSection === link.id ? "text-orange-500" : "text-white"
+                    )}
+                  >
+                    {link.name}
+                  </motion.a>
+                ))}
+              </div>
+
+              <div className="pt-8 border-t border-white/5 flex flex-col gap-6">
+                <a 
+                  href="/vinayresume.pdf" 
+                  download="Vinay_Budde_Resume.pdf"
+                  className="text-sm font-black uppercase tracking-widest text-orange-500 flex items-center gap-2"
+                >
+                  Download Resume
+                </a>
+                
+                <div className="flex gap-4">
+                  <a href="https://github.com/Vinay-Budde" target="_blank" className="p-3 bg-white/5 rounded-xl text-zinc-400">
+                    <Github size={20} />
+                  </a>
+                  <a href="https://linkedin.com/in/vinay-budde-bb8a0628a/" target="_blank" className="p-3 bg-white/5 rounded-xl text-zinc-400">
+                    <Linkedin size={20} />
+                  </a>
+                </div>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </nav>
   );
 };

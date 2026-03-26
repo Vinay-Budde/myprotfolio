@@ -8,6 +8,7 @@ import { Github, Linkedin } from 'lucide-react';
 
 // Lazy load sections below the fold for performance
 const About = lazy(() => import('./components/About').then(m => ({ default: m.About })));
+const Education = lazy(() => import('./components/Education').then(m => ({ default: m.Education })));
 const TechStack = lazy(() => import('./components/TechStack').then(m => ({ default: m.TechStack })));
 const Projects = lazy(() => import('./components/Projects').then(m => ({ default: m.Projects })));
 const Certifications = lazy(() => import('./components/Certifications').then(m => ({ default: m.Certifications })));
@@ -60,6 +61,7 @@ function App() {
             <TechStack />
             <Projects />
             <Certifications />
+            <Education />
             <Contact />
           </Suspense>
         </main>
