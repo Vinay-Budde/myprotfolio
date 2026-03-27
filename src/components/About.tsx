@@ -69,30 +69,30 @@ export const About = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.5 }
     }
   };
 
   return (
-    <section 
-      id="about" 
+    <section
+      id="about"
       onMouseMove={handleMouseMove}
       className="py-20 px-4 relative bg-[#0b0f17] overflow-hidden"
     >
       <BackgroundGrid />
       <FloatingParticles />
-      
+
       {/* Premium Visual Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-         <motion.div 
-           style={{ x: parallaxX, y: parallaxY }}
-           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 blur-[150px] rounded-full transform-gpu" 
-         />
+        <motion.div
+          style={{ x: parallaxX, y: parallaxY }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 blur-[150px] rounded-full transform-gpu"
+        />
       </div>
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="show"
@@ -118,7 +118,7 @@ export const About = () => {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-20 transition-opacity" />
               </div>
-              
+
               {/* Floating Badge */}
               <div className="absolute bottom-10 right-10 bg-orange-600 px-4 py-2 rounded-xl border border-white/20 shadow-2xl z-10 flex items-center gap-2">
                 <div className="w-2 h-2 bg-white rounded-full animate-ping" />
@@ -154,7 +154,7 @@ export const About = () => {
             >
               <div className="flex items-center gap-2 text-zinc-500 font-bold">
                 <MapPin size={18} className="text-orange-500" />
-                <span className="tracking-widest uppercase text-[10px] md:text-xs">Punjab, India | <span className="text-orange-500/80">Open to Remote / Internships</span></span>
+                <span className="tracking-widest uppercase text-[10px] md:text-xs">Hyderabad, Telangana | <span className="text-orange-500/80">Open to Remote / Internships</span></span>
               </div>
 
               <div className="h-4 w-px bg-white/10 hidden md:block" />
@@ -197,7 +197,7 @@ export const About = () => {
                 </div>
                 <h3 className="text-3xl font-black text-white uppercase tracking-tighter">Professional Journey</h3>
               </div>
-            <div className="p-10 bg-zinc-900/20 border border-white/5 rounded-[3rem] relative overflow-hidden group hover:border-orange-500/20 transition-colors duration-500">
+              <div className="p-10 bg-zinc-900/20 border border-white/5 rounded-[3rem] relative overflow-hidden group hover:border-orange-500/20 transition-colors duration-500">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-orange-500/5 blur-[100px] group-hover:bg-orange-500/10 transition-all duration-700" />
                 <p className="text-zinc-400 font-medium leading-relaxed tracking-tight text-lg relative z-10 md:text-xl">
                   Driven by a passion for building complex systems with <span className="text-white font-bold">meaningful impact</span>. I specialize in the MERN stack, focusing on robust backend performance and <span className="text-orange-500 font-bold">premium user experiences</span>. My journey is defined by a commitment to clean code, efficient algorithms, and continuous technical evolution.
