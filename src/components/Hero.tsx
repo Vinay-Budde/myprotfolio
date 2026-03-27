@@ -4,7 +4,7 @@ import { Magnetic } from './ui/Magnetic';
 import { useState, useEffect } from 'react';
 
 const TypewriterRole = () => {
-  const roles = ["Full Stack Developer", "MERN Stack Expert", "Aspiring Data Scientist", "UI/UX Enthusiast"];
+  const roles = ["Full Stack Developer", "MERN Stack Expert", "UI/UX Enthusiast"];
   const [index, setIndex] = useState(0);
   const [displayText, setDisplayText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
@@ -50,8 +50,8 @@ const TypewriterRole = () => {
  */
 const BackgroundGrid = () => (
   <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden h-full w-full">
-    <div 
-      className="absolute inset-0 opacity-[0.03]" 
+    <div
+      className="absolute inset-0 opacity-[0.03]"
       style={{
         backgroundImage: `linear-gradient(to right, #4f4f4f 1px, transparent 1px), linear-gradient(to bottom, #4f4f4f 1px, transparent 1px)`,
         backgroundSize: '80px 80px',
@@ -134,8 +134,8 @@ export const Hero = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 15 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.4 }
     }
@@ -152,17 +152,17 @@ export const Hero = () => {
 
       {/* Background Grid & Glows */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
-        <motion.div 
+        <motion.div
           style={{ x: parallaxX, y: parallaxY }}
-          className="absolute top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] bg-orange-600/10 blur-[180px] rounded-full transform-gpu" 
+          className="absolute top-1/2 right-0 -translate-y-1/2 w-[800px] h-[800px] bg-orange-600/10 blur-[180px] rounded-full transform-gpu"
         />
-        <motion.div 
+        <motion.div
           style={{ x: useTransform(parallaxX, v => v * -1.2), y: useTransform(parallaxY, v => v * -1.2) }}
-          className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-600/5 blur-[150px] rounded-full transform-gpu" 
+          className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-amber-600/5 blur-[150px] rounded-full transform-gpu"
         />
       </div>
 
-      <motion.div 
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         animate="show"
@@ -174,15 +174,17 @@ export const Hero = () => {
           {/* Status & Proof Badges */}
           <div className="flex flex-wrap gap-3">
             {[
-              { id: 'availability', content: (
-                <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600/10 border border-orange-500/20 rounded-full text-[10px] font-black text-orange-500 uppercase tracking-widest shadow-lg shadow-orange-500/5">
-                  <span className="relative flex h-2 w-2">
-                    <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                    <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
-                  </span>
-                  Available for new projects
-                </div>
-              )},
+              {
+                id: 'availability', content: (
+                  <div className="inline-flex items-center gap-2 px-4 py-2 bg-orange-600/10 border border-orange-500/20 rounded-full text-[10px] font-black text-orange-500 uppercase tracking-widest shadow-lg shadow-orange-500/5">
+                    <span className="relative flex h-2 w-2">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                    </span>
+                    Available for new projects
+                  </div>
+                )
+              },
               { id: 'dsa', icon: Brain, text: '200+ DSA Solved' },
               { id: 'projects', icon: Rocket, text: '5+ Full-Stack Projects' }
             ].map((badge) => (
@@ -215,12 +217,12 @@ export const Hero = () => {
             >
               <TypewriterRole />
             </motion.div>
-            
+
             <motion.p
               variants={itemVariants}
               className="text-xs font-black text-zinc-600 uppercase tracking-[0.3em]"
             >
-              1st Year CSE | Aspiring Data Scientist
+              3rd Year CSE | Full Stack Web Developer
             </motion.p>
           </div>
 
@@ -233,7 +235,7 @@ export const Hero = () => {
           </motion.p>
 
           {/* Tech Stack Preview Icons */}
-          <motion.div 
+          <motion.div
             variants={itemVariants}
             className="flex items-center gap-6 py-2"
           >
@@ -300,7 +302,7 @@ export const Hero = () => {
               </Magnetic>
             </div>
           </motion.div>
-          
+
           {/* "Currently Building" Status */}
           <motion.div
             variants={itemVariants}
@@ -319,9 +321,9 @@ export const Hero = () => {
         <motion.div
           variants={{
             hidden: { opacity: 0, scale: 0.9, x: 20 },
-            show: { 
-              opacity: 1, 
-              scale: 1, 
+            show: {
+              opacity: 1,
+              scale: 1,
               x: 0,
               transition: { duration: 0.8, delay: 0.4 }
             }
@@ -329,7 +331,7 @@ export const Hero = () => {
           className="relative hidden lg:block"
         >
           <div className="relative aspect-[4/5] max-w-[450px] ml-auto overflow-hidden rounded-[3rem] bg-zinc-900/50 border border-white/10 group shadow-[0_0_100px_rgba(249,115,22,0.1)]">
-            <motion.div 
+            <motion.div
               whileHover={{ scale: 1.02 }}
               transition={{ type: "spring", stiffness: 300 }}
               className="w-full h-full relative"
@@ -340,7 +342,7 @@ export const Hero = () => {
                 className="w-full h-full object-cover grayscale transition-all duration-700 group-hover:grayscale-0 transform-gpu"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-zinc-950/80 via-transparent to-transparent opacity-60 pointer-events-none" />
-              
+
               {/* Image Glow Border */}
               <div className="absolute inset-0 border-2 border-orange-500/0 group-hover:border-orange-500/20 rounded-[3rem] transition-all duration-700" />
             </motion.div>
