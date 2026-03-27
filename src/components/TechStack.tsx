@@ -37,10 +37,10 @@ const skillCategories = [
     title: "Modern Frontend",
     icon: Layout,
     color: "bg-blue-600/20 text-blue-500",
-    projects: "Used in Clean India, Logic Grid",
+    projects: "Used in Portfolio, Clean India, Logic Grid",
     skills: [
       { name: "React.js", level: 5, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/react/react-original.svg" },
-      { name: "Next.js", level: 4, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/nextjs/nextjs-original.svg" },
+      { name: "Vite / Next.js", level: 5, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/vitejs/vitejs-original.svg" },
       { name: "TypeScript", level: 4, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/typescript/typescript-original.svg" },
       { name: "Framer Motion", level: 4, icon: Activity },
       { name: "Tailwind CSS", level: 5, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/tailwindcss/tailwindcss-original.svg" },
@@ -77,7 +77,7 @@ const skillCategories = [
     title: "Languages & Tools",
     icon: Terminal,
     color: "bg-orange-600/20 text-orange-500",
-    projects: "Used across all repositories",
+    projects: "Core systems for all projects",
     skills: [
       { name: "JavaScript", level: 5, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/javascript/javascript-original.svg" },
       { name: "Python", level: 4, icon: "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/python/python-original.svg" },
@@ -275,8 +275,8 @@ export const TechStack = () => {
                   </h3>
                 </div>
                 {/* Project Badge */}
-                <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-950/80 border border-white/5 rounded-lg text-[9px] font-bold text-zinc-500 uppercase tracking-widest whitespace-nowrap">
-                   <Package size={10} className="text-orange-500" />
+                <div className="inline-flex items-center gap-2 px-3 py-1 bg-zinc-950/80 border border-white/5 rounded-lg text-[11px] font-bold text-zinc-500 uppercase tracking-widest whitespace-nowrap">
+                   <Package size={12} className="text-orange-500" />
                    {category.projects}
                 </div>
               </div>
@@ -295,12 +295,12 @@ export const TechStack = () => {
                       <img 
                         src={skill.icon} 
                         alt={skill.name} 
-                        className="w-5 h-5 grayscale opacity-60 group-hover/skill:grayscale-0 group-hover/skill:opacity-100 transition-all" 
+                        className="w-5 h-5 grayscale opacity-80 group-hover/skill:grayscale-0 group-hover/skill:opacity-100 transition-all" 
                       />
                     ) : (
-                      <skill.icon size={16} className="text-zinc-600 group-hover/skill:text-orange-500 transition-colors" />
+                      <skill.icon size={18} className="text-zinc-500 group-hover/skill:text-orange-500 transition-colors" />
                     )}
-                    <span className="text-xs font-bold text-zinc-400 group-hover/skill:text-white transition-colors tracking-tight">
+                    <span className="text-sm font-bold text-zinc-300 group-hover/skill:text-white transition-colors tracking-tight">
                       {skill.name}
                     </span>
                     <SkillLevel level={skill.level} />
@@ -337,10 +337,10 @@ export const TechStack = () => {
                   <img 
                     src={tech.icon} 
                     alt={tech.name} 
-                    className="w-full h-full object-contain grayscale opacity-60 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110" 
+                    className="w-full h-full object-contain grayscale opacity-80 transition-all duration-500 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-110" 
                   />
                 </div>
-                <span className="text-[10px] font-black text-zinc-600 group-hover:text-orange-500 uppercase tracking-[0.3em] transition-colors">
+                <span className="text-[12px] font-black text-zinc-500 group-hover:text-orange-500 uppercase tracking-[0.3em] transition-colors">
                   {tech.name}
                 </span>
               </motion.div>

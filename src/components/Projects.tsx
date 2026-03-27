@@ -2,7 +2,6 @@ import { motion, AnimatePresence, useMotionValue, useSpring, useTransform } from
 import {
   Github,
   ArrowUpRight,
-  Trophy,
   CheckCircle2,
   Target,
   X
@@ -256,7 +255,7 @@ const ProjectModal = ({ project, isOpen, onClose }: { project: Project; isOpen: 
   );
 };
 
-const ProjectImage = ({ project, isFeatured }: { project: Project; isFeatured: boolean }) => {
+const ProjectImage = ({ project }: { project: Project }) => {
   const x = useMotionValue(0);
   const y = useMotionValue(0);
 
@@ -285,10 +284,7 @@ const ProjectImage = ({ project, isFeatured }: { project: Project; isFeatured: b
 
   return (
     <div 
-      className={cn(
-        "relative group/img",
-        isFeatured ? "aspect-[16/6] md:aspect-[16/8]" : "aspect-[16/10]"
-      )}
+      className="relative group/img aspect-[16/10] bg-zinc-950/50 p-4"
       style={{ perspective: "1200px" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
@@ -299,7 +295,7 @@ const ProjectImage = ({ project, isFeatured }: { project: Project; isFeatured: b
           rotateY, 
           transformStyle: "preserve-3d" 
         }}
-        className="relative w-full h-full rounded-[2.5rem] overflow-hidden bg-zinc-900 shadow-2xl" 
+        className="relative w-full h-full rounded-2xl overflow-hidden bg-zinc-900 shadow-2xl" 
       >
         <motion.img
           src={project.image}
@@ -309,42 +305,7 @@ const ProjectImage = ({ project, isFeatured }: { project: Project; isFeatured: b
           className="w-full h-full object-cover transition-transform duration-1000 group-hover/img:scale-110 transform-gpu"
           style={{ transform: "translateZ(40px)" }}
         />
-        
-        {/* Dribbble Style Overlay */}
-        <div className="absolute inset-0 bg-black/60 opacity-0 group-hover/img:opacity-100 transition-opacity duration-300 backdrop-blur-sm flex flex-col items-center justify-center gap-4 z-20">
-            <motion.a 
-                href={project.link} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                className="px-8 py-3 bg-white text-black font-black text-xs uppercase tracking-widest rounded-full hover:bg-orange-500 hover:text-white transition-all transform hover:scale-105"
-            >
-                Live Preview
-            </motion.a>
-            <motion.a 
-                href={project.github} 
-                target="_blank" 
-                rel="noopener noreferrer"
-                initial={{ y: 20, opacity: 0 }}
-                whileInView={{ y: 0, opacity: 1 }}
-                transition={{ delay: 0.1 }}
-                className="px-8 py-3 bg-white/10 text-white font-black text-xs uppercase tracking-widest rounded-full hover:bg-white/20 transition-all backdrop-blur-md transform hover:scale-105 border border-white/20"
-            >
-                Source Code
-            </motion.a>
-        </div>
-
         <div className="absolute inset-0 bg-gradient-to-t from-[#0b0f17] via-[#0b0f17]/20 to-transparent opacity-60" />
-        
-        {isFeatured && (
-          <div className="absolute top-6 left-6 p-0.5 bg-gradient-to-r from-orange-500 to-orange-400 rounded-xl z-30" style={{ transform: "translateZ(60px)" }}>
-            <div className="px-3 py-1.5 bg-[#0b0f17]/80 backdrop-blur-md rounded-[10px] flex items-center gap-2">
-              <Trophy size={12} className="text-orange-500" />
-              <span className="text-[8px] font-black uppercase tracking-[0.2em] text-white">Featured Project</span>
-            </div>
-          </div>
-        )}
       </motion.div>
     </div>
   );
@@ -359,9 +320,6 @@ export const Projects = () => {
   const filteredProjects = projectData.filter(p =>
     activeFilter === 'all' ? true : p.category === activeFilter
   );
-
-  const featuredProject = filteredProjects.find(p => p.isFeatured);
-  const otherProjects = filteredProjects.filter(p => !p.isFeatured);
 
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
@@ -454,128 +412,83 @@ export const Projects = () => {
           </motion.div>
         </div>
 
-        {/* Content Hierarchy */}
-        <div className="space-y-24">
-          {/* 1. DOMINANT FEATURED PROJECT */}
-          {featuredProject && (
-            <motion.div
-              layout
-              variants={itemVariants}
-              className="group cursor-pointer space-y-12"
-              onClick={() => setSelectedProject(featuredProject)}
-            >
-                <ProjectImage project={featuredProject} isFeatured={true} />
-                
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 px-4">
-                   <div className="lg:col-span-7 space-y-8">
-                      <div className="space-y-3">
-                        <div className="flex items-center gap-4">
-                           <h3 className="text-6xl md:text-8xl font-black text-white uppercase tracking-tighter group-hover:text-orange-500 transition-colors">{featuredProject.title}</h3>
-                           <div className="px-4 py-1.5 bg-orange-600/10 border border-orange-500/20 rounded-full text-[10px] font-black text-orange-500 uppercase tracking-widest">{featuredProject.metrics_short}</div>
-                        </div>
-                        <p className="text-zinc-400 font-bold text-xl md:text-3xl tracking-tight leading-tight">{featuredProject.shortDesc}</p>
-                      </div>
+        {/* Unified Project Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <AnimatePresence mode="popLayout">
+            {filteredProjects.map((project) => (
+              <motion.div
+                key={project.id}
+                layout
+                variants={itemVariants}
+                whileHover={{
+                  y: -10,
+                  scale: 1.01,
+                  transition: { type: "spring", stiffness: 300, damping: 15 }
+                }}
+                className="group bg-zinc-900/30 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl hover:border-orange-500/40 transition-all duration-300 flex flex-col backdrop-blur-sm transform-gpu cursor-pointer"
+                onClick={() => setSelectedProject(project)}
+              >
+                {/* Visual Section */}
+                <ProjectImage project={project} />
 
-                      {/* Problem/Solution Logic */}
-                      <div className="grid grid-cols-2 gap-8 border-l border-white/5 pl-8">
-                         <div className="space-y-2">
-                             <p className="text-[10px] font-black text-red-500 uppercase tracking-widest flex items-center gap-2 underline decoration-red-500/20">Problem</p>
-                             <p className="text-sm text-zinc-500 font-medium leading-relaxed">{featuredProject.problem}</p>
-                         </div>
-                         <div className="space-y-2">
-                             <p className="text-[10px] font-black text-green-500 uppercase tracking-widest flex items-center gap-2 underline decoration-green-500/20">Solution</p>
-                             <p className="text-sm text-zinc-300 font-medium leading-relaxed">{featuredProject.solution_short}</p>
-                         </div>
-                      </div>
-                   </div>
+                {/* Content Section */}
+                <div className="p-10 space-y-6 flex-1 flex flex-col relative">
+                  <div className="space-y-4 transform-gpu group-hover:-translate-y-1 transition-transform duration-500">
+                    <h4 className="text-xl md:text-2xl font-black text-white tracking-tight leading-none group-hover:text-orange-500 transition-colors duration-300">
+                      {project.title}
+                    </h4>
+                    <p className="text-orange-500 font-bold uppercase text-[10px] tracking-[0.2em]">
+                      {project.architecture}
+                    </p>
+                  </div>
 
-                   <div className="lg:col-span-5 space-y-10">
-                      <div className="space-y-4">
-                         <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em]">Key Features</p>
-                         <div className="flex flex-wrap gap-4">
-                            {featuredProject.features.map(f => (
-                              <div key={f.text} className="flex items-center gap-3 px-5 py-3 bg-white/5 border border-white/5 rounded-2xl hover:bg-white/10 transition-all">
-                                 <span className="text-xl">{f.icon}</span>
-                                 <span className="text-[10px] font-black text-zinc-300 uppercase tracking-widest">{f.text}</span>
-                              </div>
-                            ))}
-                         </div>
-                      </div>
+                  <p className="text-zinc-500 text-xs font-semibold leading-relaxed tracking-tight line-clamp-3 group-hover:text-zinc-400 transition-colors duration-300">
+                    {project.shortDesc}
+                  </p>
 
-                      <div className="space-y-4">
-                         <p className="text-[10px] font-black text-zinc-600 uppercase tracking-[0.3em]">Stack & Logic</p>
-                         <div className="flex flex-wrap gap-3">
-                            {featuredProject.tech.map(t => (
-                              <div key={t.name} className="flex items-center gap-2 px-3 py-1.5 bg-zinc-900 border border-white/5 rounded-xl">
-                                 <span className="text-sm">{t.icon}</span>
-                                 <span className="text-[9px] font-black text-zinc-500 uppercase tracking-widest">{t.name}</span>
-                              </div>
-                            ))}
-                            <div className="px-4 py-2 border border-orange-500/20 rounded-xl text-[9px] font-black text-orange-500 uppercase tracking-widest">
-                               {featuredProject.complexity}
-                            </div>
-                         </div>
-                      </div>
-                   </div>
-                </div>
-            </motion.div>
-          )}
+                  {/* Tech Stack Overlay (Subtle) */}
+                  <div className="flex flex-wrap gap-2 pt-2">
+                    {project.tech.map(t => (
+                      <span key={t.name} className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">{t.name}</span>
+                    ))}
+                  </div>
 
-          {/* 2. PROJECT GRID AREA */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 lg:gap-16 pt-12">
-            <AnimatePresence mode="popLayout">
-              {otherProjects.map((project) => (
-                <motion.div
-                  key={project.id}
-                  layout
-                  variants={itemVariants}
-                  whileHover={{ y: -6 }}
-                  className="group cursor-pointer flex flex-col gap-10 p-6 rounded-[3rem] border border-transparent hover:border-orange-500/20 hover:bg-white/[0.02] transition-all transform-gpu"
-                  onClick={() => setSelectedProject(project)}
-                >
-                  <ProjectImage project={project} isFeatured={false} />
-                  
-                  <div className="space-y-6 px-4">
-                    <div className="space-y-1">
-                      <div className="flex justify-between items-center">
-                        <h4 className="text-4xl md:text-5xl font-black text-white uppercase tracking-tighter group-hover:text-orange-500 transition-colors">{project.title}</h4>
-                        <div className="p-3 bg-white/5 border border-white/5 rounded-2xl text-zinc-600 group-hover:text-white transition-all shadow-xl">
-                           <ArrowUpRight size={20} />
-                        </div>
-                      </div>
-                      <p className="text-orange-500 text-[9px] font-black uppercase tracking-[0.3em]">{project.metrics_short}</p>
-                    </div>
-
-                    <p className="text-zinc-400 font-bold text-sm tracking-tight line-clamp-2 md:line-clamp-none">{project.shortDesc}</p>
-                    
-                    {/* Tiny Problem/Solution Context */}
-                    <div className="space-y-3 py-4 border-y border-white/5">
-                        <div className="flex gap-4">
-                           <span className="text-[8px] font-black text-red-500/60 uppercase tracking-widest w-12 pt-1">Problem</span>
-                           <p className="text-[11px] text-zinc-500 font-medium leading-relaxed flex-1">{project.problem}</p>
-                        </div>
-                        <div className="flex gap-4">
-                           <span className="text-[8px] font-black text-green-500/60 uppercase tracking-widest w-12 pt-1">Solution</span>
-                           <p className="text-[11px] text-zinc-300 font-medium leading-relaxed flex-1">{project.solution_short}</p>
-                        </div>
-                    </div>
-
-                    <div className="flex flex-wrap items-center justify-between gap-4">
-                        <div className="flex flex-wrap gap-3">
-                           {project.tech.map(t => (
-                             <div key={t.name} className="flex items-center gap-1">
-                                <span className="text-xs">{t.icon}</span>
-                                <span className="text-[8px] font-black text-zinc-600 uppercase tracking-widest">{t.name}</span>
-                             </div>
-                           ))}
-                        </div>
-                        <span className="text-[8px] font-black text-orange-500/60 uppercase tracking-widest">{project.complexity}</span>
+                  {/* Footer Area */}
+                  <div className="pt-6 mt-auto border-t border-white/5 flex items-center justify-between">
+                    <span className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest flex items-center gap-2">
+                      <motion.div
+                        animate={{ rotate: [0, 10, -10, 0] }}
+                        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
+                      >
+                         <CheckCircle2 size={12} className="text-orange-500" />
+                      </motion.div>
+                      {project.metrics_short}
+                    </span>
+                    <div className="flex items-center gap-2">
+                      <a 
+                        href={project.github} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="p-2.5 rounded-full bg-white/5 text-zinc-400 hover:text-orange-500 hover:bg-orange-500/10 transition-all duration-300"
+                      >
+                        <Github size={16} />
+                      </a>
+                      <a 
+                        href={project.link} 
+                        target="_blank" 
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="p-2.5 rounded-full bg-white/5 text-zinc-400 hover:text-orange-500 hover:bg-orange-500/10 transition-all duration-300"
+                      >
+                        <ArrowUpRight size={16} />
+                      </a>
                     </div>
                   </div>
-                </motion.div>
-              ))}
-            </AnimatePresence>
-          </div>
+                </div>
+              </motion.div>
+            ))}
+          </AnimatePresence>
         </div>
 
         {/* Details Modal */}
