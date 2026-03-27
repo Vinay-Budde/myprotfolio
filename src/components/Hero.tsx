@@ -185,7 +185,7 @@ export const Hero = () => {
                   </div>
                 )
               },
-              { id: 'dsa', icon: Brain, text: '200+ DSA Solved' },
+              { id: 'dsa', icon: Brain, text: '100+ DSA Solved' },
               { id: 'projects', icon: Rocket, text: '5+ Full-Stack Projects' }
             ].map((badge) => (
               <motion.div
