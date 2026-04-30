@@ -46,6 +46,36 @@ const filters = [
 
 const projectData: Project[] = [
   {
+    title: 'Virtual Cosmos',
+    id: 'virtual-cosmos',
+    category: 'fullstack',
+    image: 'https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&q=80',
+    shortDesc: 'Advanced real-time communication platform with screen recording.',
+    fullDesc: 'A comprehensive web-based communication platform featuring real-time peer-to-peer screen sharing, robust camera/audio stream management, and dedicated state-machine driven screen recording functionalities.',
+    problem: 'Handling complex media streams and decoupling recording from active screen sharing.',
+    solution_short: 'Built a reliable WebRTC platform with decoupled recording.',
+    challenge: 'Decoupling the recording stream from the active peer-to-peer screen share and ensuring robust media device management before joining the lobby.',
+    solution: 'Implemented a dedicated recording state machine independent of active peer-to-peer streams, ensuring robust media stream capturing, and providing a reliable lobby preview for users.',
+    architecture: 'WebRTC + React Architecture',
+    role: 'Lead Full-Stack Developer',
+    features: [
+      { icon: '🎥', text: 'Screen Recording' },
+      { icon: '🎙️', text: 'Live Media Streams' },
+      { icon: '🌐', text: 'P2P Sharing' }
+    ],
+    metrics: ['Zero-Lag Sharing', 'Decoupled Recording', 'Seamless Lobby Preview'],
+    metrics_short: '🎥 Real-time P2P Media',
+    complexity: 'Advanced WebRTC & Media Streams',
+    tech: [
+      { name: 'WebRTC', icon: '🌐' },
+      { name: 'React.js', icon: '⚛️' },
+      { name: 'Node.js', icon: '🟢' }
+    ],
+    github: 'https://github.com/Vinay-Budde/Cosmos',
+    link: 'https://cosmos-gules.vercel.app/',
+    isFeatured: true,
+  },
+  {
     title: 'Clean India',
     id: 'clean-india',
     category: 'fullstack',
@@ -157,7 +187,7 @@ const ProjectModal = ({ project, isOpen, onClose }: { project: Project; isOpen: 
             onClick={onClose}
             className="absolute inset-0 bg-[#0b0f17]/90 backdrop-blur-2xl"
           />
-          
+
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 15 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -167,13 +197,13 @@ const ProjectModal = ({ project, isOpen, onClose }: { project: Project; isOpen: 
           >
             {/* Visual Side */}
             <div className="md:w-1/2 h-64 md:h-auto overflow-hidden">
-               <img 
-                 src={project.image} 
-                 alt={project.title} 
-                 loading="lazy"
-                 decoding="async"
-                 className="w-full h-full object-cover transform-gpu" 
-               />
+              <img
+                src={project.image}
+                alt={project.title}
+                loading="lazy"
+                decoding="async"
+                className="w-full h-full object-cover transform-gpu"
+              />
             </div>
 
             {/* Content Side */}
@@ -218,22 +248,22 @@ const ProjectModal = ({ project, isOpen, onClose }: { project: Project; isOpen: 
                 </div>
 
                 <div className="space-y-3">
-                   <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Key Features</p>
-                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
-                      {project.features.map(f => (
-                        <div key={f.text} className="flex items-center gap-2 text-xs text-zinc-400 font-semibold">
-                          <span className="text-base">{f.icon}</span>
-                          {f.text}
-                        </div>
-                      ))}
-                   </div>
+                  <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Key Features</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                    {project.features.map(f => (
+                      <div key={f.text} className="flex items-center gap-2 text-xs text-zinc-400 font-semibold">
+                        <span className="text-base">{f.icon}</span>
+                        {f.text}
+                      </div>
+                    ))}
+                  </div>
                 </div>
 
                 <div className="grid grid-cols-3 gap-2 py-6 border-y border-white/5">
                   {project.metrics.map(m => (
                     <div key={m} className="text-center">
-                       <p className="text-zinc-500 text-[8px] font-black uppercase tracking-tighter">Metric</p>
-                       <p className="text-white text-[10px] font-black">{m}</p>
+                      <p className="text-zinc-500 text-[8px] font-black uppercase tracking-tighter">Metric</p>
+                      <p className="text-white text-[10px] font-black">{m}</p>
                     </div>
                   ))}
                 </div>
@@ -244,7 +274,7 @@ const ProjectModal = ({ project, isOpen, onClose }: { project: Project; isOpen: 
                   <Github size={18} /> Source Code
                 </a>
                 <a href={project.link} target="_blank" rel="noopener noreferrer" className="flex-1 flex items-center justify-center gap-3 py-4 bg-orange-600 hover:bg-orange-500 text-white rounded-2xl transition-all font-black text-[10px] uppercase tracking-widest shadow-xl shadow-orange-600/20">
-                   Live Demo
+                  Live Demo
                 </a>
               </div>
             </div>
@@ -283,19 +313,19 @@ const ProjectImage = ({ project }: { project: Project }) => {
   };
 
   return (
-    <div 
+    <div
       className="relative group/img aspect-[16/10] bg-zinc-950/50 p-4"
       style={{ perspective: "1200px" }}
       onMouseMove={handleMouseMove}
       onMouseLeave={handleMouseLeave}
     >
       <motion.div
-        style={{ 
-          rotateX, 
-          rotateY, 
-          transformStyle: "preserve-3d" 
+        style={{
+          rotateX,
+          rotateY,
+          transformStyle: "preserve-3d"
         }}
-        className="relative w-full h-full rounded-2xl overflow-hidden bg-zinc-900 shadow-2xl" 
+        className="relative w-full h-full rounded-2xl overflow-hidden bg-zinc-900 shadow-2xl"
       >
         <motion.img
           src={project.image}
@@ -349,34 +379,34 @@ export const Projects = () => {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 20 },
-    show: { 
-      opacity: 1, 
+    show: {
+      opacity: 1,
       y: 0,
       transition: { duration: 0.5 }
     }
   };
 
   return (
-    <section 
-      id="projects" 
+    <section
+      id="projects"
       onMouseMove={handleMouseMove}
       className="py-40 px-4 relative bg-[#0b0f17] overflow-hidden"
     >
       <BackgroundGrid />
       <FloatingParticles />
-      
+
       {/* Premium Section Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none opacity-20">
-         <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
-         <motion.div 
-           style={{ x: parallaxX, y: parallaxY }}
-           className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 blur-[120px] rounded-full transform-gpu" 
-         />
+        <div className="absolute top-0 left-0 w-full h-full bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]" />
+        <motion.div
+          style={{ x: parallaxX, y: parallaxY }}
+          className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-orange-600/10 blur-[120px] rounded-full transform-gpu"
+        />
       </div>
 
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
-      
-      <motion.div 
+
+      <motion.div
         variants={containerVariants}
         initial="hidden"
         whileInView="show"
@@ -388,10 +418,10 @@ export const Projects = () => {
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-12">
           <motion.div variants={itemVariants} className="space-y-6">
             <h2 className="text-7xl md:text-9xl font-black text-white uppercase tracking-tighter leading-none">
-                Selected <span className="text-orange-500">Work</span>
+              Selected <span className="text-orange-500">Work</span>
             </h2>
             <p className="text-zinc-500 font-bold text-sm md:text-xl leading-relaxed tracking-tight max-w-xl">
-               Real-world applications built with performance and scalability in mind.
+              Real-world applications built with performance and scalability in mind.
             </p>
           </motion.div>
 
@@ -460,23 +490,23 @@ export const Projects = () => {
                         animate={{ rotate: [0, 10, -10, 0] }}
                         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
                       >
-                         <CheckCircle2 size={12} className="text-orange-500" />
+                        <CheckCircle2 size={12} className="text-orange-500" />
                       </motion.div>
                       {project.metrics_short}
                     </span>
                     <div className="flex items-center gap-2">
-                      <a 
-                        href={project.github} 
-                        target="_blank" 
+                      <a
+                        href={project.github}
+                        target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
                         className="p-2.5 rounded-full bg-white/5 text-zinc-400 hover:text-orange-500 hover:bg-orange-500/10 transition-all duration-300"
                       >
                         <Github size={16} />
                       </a>
-                      <a 
-                        href={project.link} 
-                        target="_blank" 
+                      <a
+                        href={project.link}
+                        target="_blank"
                         rel="noopener noreferrer"
                         onClick={(e) => e.stopPropagation()}
                         className="p-2.5 rounded-full bg-white/5 text-zinc-400 hover:text-orange-500 hover:bg-orange-500/10 transition-all duration-300"
@@ -493,19 +523,19 @@ export const Projects = () => {
 
         {/* Details Modal */}
         {selectedProject && (
-          <ProjectModal 
-            project={selectedProject} 
-            isOpen={!!selectedProject} 
-            onClose={() => setSelectedProject(null)} 
+          <ProjectModal
+            project={selectedProject}
+            isOpen={!!selectedProject}
+            onClose={() => setSelectedProject(null)}
           />
         )}
 
         {/* Final Archive CTA */}
         <div className="text-center pt-20">
-            <a href="https://github.com/Vinay-Budde" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 px-12 py-6 bg-zinc-900 border border-white/5 text-white font-black text-xs uppercase tracking-[0.4em] hover:bg-orange-500 transition-all rounded-3xl shadow-2xl">
-               <Github size={20} />
-               Explore Full Archive
-            </a>
+          <a href="https://github.com/Vinay-Budde" target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-4 px-12 py-6 bg-zinc-900 border border-white/5 text-white font-black text-xs uppercase tracking-[0.4em] hover:bg-orange-500 transition-all rounded-3xl shadow-2xl">
+            <Github size={20} />
+            Explore Full Archive
+          </a>
         </div>
 
       </motion.div>
