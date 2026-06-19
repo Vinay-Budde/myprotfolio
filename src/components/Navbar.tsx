@@ -49,26 +49,47 @@ export const Navbar = () => {
   ];
 
   return (
-    <nav className={cn(
-      "fixed top-0 left-0 right-0 z-[100] transition-all duration-500 py-6 px-6",
-      isScrolled ? "bg-background/80 backdrop-blur-xl border-b border-white/5 py-4" : "bg-transparent",
-      isMenuOpen && "bg-background/95 backdrop-blur-2xl border-b border-white/5"
-    )}>
+    <nav
+      className={cn(
+        "fixed top-0 left-0 right-0 z-[100] transition-all duration-500 py-6 px-6",
+        isMenuOpen && "bg-[#020408]/95 backdrop-blur-3xl border-b border-white/5"
+      )}
+      style={{
+        background: isScrolled
+          ? 'rgba(2,4,8,0.75)'
+          : 'transparent',
+        backdropFilter: isScrolled ? 'blur(32px) saturate(180%)' : 'none',
+        WebkitBackdropFilter: isScrolled ? 'blur(32px) saturate(180%)' : 'none',
+        borderBottom: isScrolled ? '1px solid rgba(255,255,255,0.06)' : 'none',
+        boxShadow: isScrolled
+          ? '0 1px 0 rgba(249,115,22,0.08), 0 8px 32px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)'
+          : 'none',
+        paddingTop: isScrolled ? '14px' : '24px',
+        paddingBottom: isScrolled ? '14px' : '24px',
+      }}
+    >
       <div className="max-w-6xl mx-auto flex items-center justify-between">
         
         {/* Branding / Logo */}
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ duration: 0.5 }}
           className="flex items-center gap-3 group cursor-pointer"
         >
-           <div className="p-2 bg-orange-600 rounded-lg shadow-lg shadow-orange-600/20 transition-transform group-hover:rotate-12">
-              <Monitor size={20} className="text-white" />
-           </div>
-           <span className="text-xl font-black tracking-tighter text-white uppercase">
-              Budde <span className="text-orange-500">Vinay</span>
-           </span>
+          <motion.div
+            whileHover={{ rotate: 12, scale: 1.1 }}
+            transition={{ type: 'spring', stiffness: 400, damping: 15 }}
+            className="p-2 bg-orange-600 rounded-lg shadow-lg shadow-orange-600/30 transition-all"
+            style={{ boxShadow: '0 4px 16px rgba(249,115,22,0.4), 0 8px 32px rgba(249,115,22,0.2), inset 0 1px 0 rgba(255,255,255,0.2)' }}
+          >
+            <Monitor size={20} className="text-white" />
+          </motion.div>
+          <span className="text-xl font-black tracking-tighter text-white uppercase"
+            style={{ textShadow: '0 0 20px rgba(249,115,22,0.2)' }}
+          >
+            Budde <span className="text-orange-500">Vinay</span>
+          </span>
         </motion.div>
 
         {/* Desktop Menu */}

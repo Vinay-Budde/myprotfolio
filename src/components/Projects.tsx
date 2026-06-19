@@ -42,6 +42,7 @@ const filters = [
   { name: 'All Work', value: 'all' },
   { name: 'Full Stack', value: 'fullstack' },
   { name: 'Frontend', value: 'frontend' },
+  { name: 'Games', value: 'games' },
 ];
 
 const projectData: Project[] = [
@@ -163,6 +164,96 @@ const projectData: Project[] = [
     ],
     github: 'https://github.com/Vinay-Budde/recordmanager',
     link: 'https://recordmanager.vercel.app/',
+    isFeatured: false,
+  },
+  {
+    title: 'Tic Tac Toe',
+    id: 'tic-tac-toe',
+    category: 'games',
+    image: 'https://images.unsplash.com/photo-1611996575749-79a3a250f948?auto=format&fit=crop&q=80',
+    shortDesc: 'Classic two-player strategy game with a modern, animated UI.',
+    fullDesc: 'A polished Tic Tac Toe game featuring smooth win animations, smart game-state detection, and a clean dark UI. Supports player-vs-player mode with score tracking across rounds.',
+    problem: 'Building a responsive, bug-free game state engine with a satisfying user experience.',
+    solution_short: 'Engineered a deterministic win-detection engine with animated feedback.',
+    challenge: 'Managing complex game states — draws, wins, and resets — without stale closures or missed re-renders across rapid player interactions.',
+    solution: 'Built a clean finite state machine for game flow with React hooks, ensuring deterministic win-check logic and immediate, animated feedback for every game outcome.',
+    architecture: 'React Game State Engine',
+    role: 'Frontend Developer',
+    features: [
+      { icon: '🎮', text: 'Two-Player Mode' },
+      { icon: '🏆', text: 'Score Tracking' },
+      { icon: '✨', text: 'Win Animations' }
+    ],
+    metrics: ['Zero-Bug State Logic', 'Instant Win Detection', 'Smooth Animations'],
+    metrics_short: '🎮 Deterministic Game State Engine',
+    complexity: 'Finite State Machine + React Hooks',
+    tech: [
+      { name: 'React.js', icon: '⚛️' },
+      { name: 'TypeScript', icon: '📘' },
+      { name: 'CSS', icon: '🎨' }
+    ],
+    github: 'https://github.com/Vinay-Budde/tictactoe',
+    link: 'https://tictactoe-vinay.vercel.app/',
+    isFeatured: false,
+  },
+  {
+    title: 'SplitEase',
+    id: 'splitease',
+    category: 'frontend',
+    image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80',
+    shortDesc: 'Smart expense splitter for groups with instant bill breakdown.',
+    fullDesc: 'A sleek and intuitive expense-splitting application that lets groups calculate and settle shared bills in seconds. Features dynamic participant management, percentage and equal-split modes, and a clean summary view.',
+    problem: 'Manual bill splitting is error-prone and tedious for groups of varying sizes.',
+    solution_short: 'Built a real-time, reactive split calculator with multiple split modes.',
+    challenge: 'Handling dynamic participant lists while keeping split calculations reactive and accurate across equal, percentage, and custom split modes without inconsistent rounding errors.',
+    solution: 'Implemented a reactive calculation engine that re-computes splits on every state change with precise rounding strategies, ensuring totals always reconcile to the cent.',
+    architecture: 'React Reactive Calculator',
+    role: 'Frontend Developer',
+    features: [
+      { icon: '💸', text: 'Equal & % Split' },
+      { icon: '👥', text: 'Dynamic Groups' },
+      { icon: '📊', text: 'Instant Summary' }
+    ],
+    metrics: ['Penny-Perfect Splits', 'Real-time Calculation', 'Dynamic Group Support'],
+    metrics_short: '💸 Real-time Reactive Splits',
+    complexity: 'Reactive State + Rounding Engine',
+    tech: [
+      { name: 'React.js', icon: '⚛️' },
+      { name: 'TypeScript', icon: '📘' },
+      { name: 'CSS', icon: '🎨' }
+    ],
+    github: 'https://github.com/Vinay-Budde/splitease',
+    link: 'https://splitease-vinay.vercel.app/',
+    isFeatured: false,
+  },
+  {
+    title: 'Classic Snake',
+    id: 'classic-snake',
+    category: 'games',
+    image: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80',
+    shortDesc: 'High-performance Snake game powered by Canvas API with speed scaling.',
+    fullDesc: 'A faithful reimagination of the classic Snake game using the HTML5 Canvas API. Features smooth 60fps gameplay, dynamic speed scaling as the snake grows, local high-score persistence, and responsive keyboard controls.',
+    problem: 'Rendering a collision-accurate, smooth-feeling Snake game entirely in the browser.',
+    solution_short: 'Built a requestAnimationFrame game loop with precise grid collision detection.',
+    challenge: 'Achieving smooth, frame-rate-independent movement and accurate self-collision detection on a canvas grid without drift or missed inputs at high speeds.',
+    solution: 'Implemented a time-delta-based game loop using requestAnimationFrame with a fixed-grid collision engine, input buffering for responsive direction changes, and localStorage for persistent high scores.',
+    architecture: 'Canvas API Game Loop',
+    role: 'Frontend Developer',
+    features: [
+      { icon: '🐍', text: 'Smooth 60fps Gameplay' },
+      { icon: '⚡', text: 'Dynamic Speed Scaling' },
+      { icon: '🏅', text: 'Local High Scores' }
+    ],
+    metrics: ['60fps Smooth Loop', 'Zero-Drift Collision', 'Persistent Scores'],
+    metrics_short: '🐍 60fps Canvas Game Loop',
+    complexity: 'Canvas API + requestAnimationFrame',
+    tech: [
+      { name: 'JavaScript', icon: '🟨' },
+      { name: 'HTML5 Canvas', icon: '🎨' },
+      { name: 'CSS', icon: '💅' }
+    ],
+    github: 'https://github.com/Vinay-Budde/game',
+    link: 'https://vinay-budde.github.io/game/',
     isFeatured: false,
   }
 ];
@@ -451,11 +542,15 @@ export const Projects = () => {
                 layout
                 variants={itemVariants}
                 whileHover={{
-                  y: -10,
-                  scale: 1.01,
+                  y: -14,
+                  scale: 1.015,
                   transition: { type: "spring", stiffness: 300, damping: 15 }
                 }}
-                className="group bg-zinc-900/30 border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl hover:border-orange-500/40 transition-all duration-300 flex flex-col backdrop-blur-sm transform-gpu cursor-pointer"
+                className="group rim-light stack-card border border-white/5 rounded-[2.5rem] overflow-hidden shadow-2xl hover:border-orange-500/30 transition-all duration-300 flex flex-col backdrop-blur-sm transform-gpu cursor-pointer"
+                style={{
+                  background: 'linear-gradient(135deg, rgba(24,24,27,0.6) 0%, rgba(15,15,18,0.8) 50%, rgba(24,24,27,0.4) 100%)',
+                  boxShadow: '0 4px 24px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.04)',
+                }}
                 onClick={() => setSelectedProject(project)}
               >
                 {/* Visual Section */}

@@ -36,18 +36,149 @@ html {
   }
 }
 
+/* ─── Glassmorphism ─────────────────────────────────────────────── */
 .glass {
   @apply bg-white/[0.03] backdrop-blur-xl border border-white/[0.08];
 }
 
+.glass-3d {
+  background: linear-gradient(135deg, rgba(255,255,255,0.07) 0%, rgba(255,255,255,0.02) 100%);
+  backdrop-filter: blur(24px) saturate(160%);
+  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  border: 1px solid rgba(255,255,255,0.08);
+  box-shadow:
+    0 8px 32px rgba(0,0,0,0.4),
+    inset 0 1px 0 rgba(255,255,255,0.1),
+    inset 0 -1px 0 rgba(0,0,0,0.2);
+}
+
+/* ─── 3D Perspective Utilities ──────────────────────────────────── */
+.perspective-container {
+  perspective: 1200px;
+  perspective-origin: 50% 40%;
+}
+
+.preserve-3d {
+  transform-style: preserve-3d;
+}
+
+.card-3d {
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+}
+
+.card-3d:hover {
+  transform: rotateY(6deg) rotateX(-3deg) translateZ(20px);
+}
+
+/* ─── Depth Shadow — multi-layer z-illusion ─────────────────────── */
+.depth-shadow {
+  box-shadow:
+    0 1px 0 rgba(255,255,255,0.05),
+    0 4px 8px rgba(0,0,0,0.3),
+    0 12px 24px rgba(0,0,0,0.25),
+    0 32px 64px rgba(0,0,0,0.2),
+    0 0 80px rgba(249,115,22,0.06);
+}
+
+.depth-shadow-orange {
+  box-shadow:
+    0 0 0 1px rgba(249,115,22,0.15),
+    0 4px 16px rgba(249,115,22,0.15),
+    0 16px 48px rgba(249,115,22,0.1),
+    0 40px 80px rgba(0,0,0,0.4);
+}
+
+/* ─── Text Effects ──────────────────────────────────────────────── */
 .gradient-text {
   @apply bg-clip-text text-transparent bg-gradient-to-r from-orange-400 to-amber-600;
 }
 
+.text-3d {
+  text-shadow:
+    0 1px 0 rgba(255,255,255,0.1),
+    0 2px 4px rgba(0,0,0,0.4),
+    0 4px 12px rgba(0,0,0,0.3),
+    0 8px 24px rgba(0,0,0,0.2);
+}
+
+.text-emboss {
+  text-shadow:
+    0 -1px 0 rgba(0,0,0,0.5),
+    0 1px 0 rgba(255,255,255,0.08),
+    0 0 40px rgba(249,115,22,0.3);
+}
+
+/* ─── Glow Utilities ────────────────────────────────────────────── */
 .orange-glow {
   box-shadow: 0 0 40px rgba(249, 115, 22, 0.15);
 }
 
+.orange-glow-strong {
+  box-shadow:
+    0 0 20px rgba(249,115,22,0.3),
+    0 0 60px rgba(249,115,22,0.15),
+    0 0 120px rgba(249,115,22,0.08);
+}
+
+/* ─── Rim Light on cards ────────────────────────────────────────── */
+.rim-light {
+  position: relative;
+}
+.rim-light::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(135deg,
+    rgba(249,115,22,0.4) 0%,
+    transparent 40%,
+    transparent 60%,
+    rgba(249,115,22,0.2) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.rim-light:hover::before {
+  opacity: 1;
+}
+
+/* ─── Stacked Card depth illusion ──────────────────────────────── */
+.stack-card {
+  position: relative;
+}
+.stack-card::after {
+  content: '';
+  position: absolute;
+  inset: 8px -8px -8px 8px;
+  background: rgba(249,115,22,0.05);
+  border: 1px solid rgba(249,115,22,0.08);
+  border-radius: inherit;
+  z-index: -1;
+  transition: all 0.4s ease;
+}
+.stack-card:hover::after {
+  inset: 12px -12px -12px 12px;
+  background: rgba(249,115,22,0.08);
+  border-color: rgba(249,115,22,0.15);
+}
+
+/* ─── Starfield layers ──────────────────────────────────────────── */
+.stars-layer-1,
+.stars-layer-2,
+.stars-layer-3 {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+}
+
+/* ─── Gradient / Background ─────────────────────────────────────── */
 .animated-gradient {
   background-size: 200% 200%;
   animation: gradient 15s ease infinite;
@@ -61,10 +192,7 @@ html {
   mask-image: radial-gradient(circle at center, black 40%, transparent 90%);
 }
 
-@keyframes grid-fade {
-  from { opacity: 0; }
-  to { opacity: 0.15; }
-}
+/* ─── Keyframes ─────────────────────────────────────────────────── */
 
 @keyframes gradient {
   0% { background-position: 0% 50%; }
@@ -72,18 +200,68 @@ html {
   100% { background-position: 0% 50%; }
 }
 
-::-webkit-scrollbar {
-  width: 10px;
+@keyframes float-3d {
+  0%   { transform: translateY(0px) translateZ(0px) rotateX(0deg); }
+  33%  { transform: translateY(-12px) translateZ(6px) rotateX(1.5deg); }
+  66%  { transform: translateY(-6px) translateZ(12px) rotateX(-1deg); }
+  100% { transform: translateY(0px) translateZ(0px) rotateX(0deg); }
 }
 
-::-webkit-scrollbar-track {
-  @apply bg-background;
+@keyframes depth-pulse {
+  0%   { transform: scale(1) translateZ(0);   opacity: 0.6; filter: blur(80px); }
+  50%  { transform: scale(1.15) translateZ(20px); opacity: 1;   filter: blur(100px); }
+  100% { transform: scale(1) translateZ(0);   opacity: 0.6; filter: blur(80px); }
 }
 
+@keyframes rotate-y {
+  from { transform: rotateY(0deg); }
+  to   { transform: rotateY(360deg); }
+}
+
+@keyframes rim-sweep {
+  0%   { background-position: 0% 50%; }
+  100% { background-position: 200% 50%; }
+}
+
+@keyframes star-drift {
+  0%   { transform: translateY(0) translateX(0); }
+  100% { transform: translateY(-120px) translateX(20px); }
+}
+
+@keyframes orbit {
+  0%   { transform: rotate(0deg) translateX(140px) rotate(0deg); }
+  100% { transform: rotate(360deg) translateX(140px) rotate(-360deg); }
+}
+
+@keyframes grid-fade {
+  from { opacity: 0; }
+  to { opacity: 0.15; }
+}
+
+@keyframes scanline {
+  0%   { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+/* ─── Scrollbar ─────────────────────────────────────────────────── */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: #050505; }
 ::-webkit-scrollbar-thumb {
-  @apply bg-zinc-800 rounded-full border-2 border-background;
+  background: linear-gradient(to bottom, #ea580c, #92400e);
+  border-radius: 999px;
+}
+::-webkit-scrollbar-thumb:hover { background: #f97316; }
+
+/* ─── Custom scrollbar inside modals ───────────────────────────── */
+.custom-scrollbar::-webkit-scrollbar { width: 4px; }
+.custom-scrollbar::-webkit-scrollbar-track { background: transparent; }
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: rgba(249,115,22,0.3);
+  border-radius: 999px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-zinc-700;
+/* ─── Selection color ───────────────────────────────────────────── */
+::selection {
+  background: rgba(249,115,22,0.25);
+  color: white;
 }
