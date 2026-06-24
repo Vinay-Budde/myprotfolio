@@ -233,24 +233,23 @@ export const Hero = () => {
       {/* Large background glows that parallax with mouse */}
       <div className="absolute inset-0 z-0 overflow-hidden pointer-events-none">
         <motion.div
-          style={{ x: parallaxX, y: parallaxY }}
           className="absolute top-1/2 right-0 -translate-y-1/2 w-[900px] h-[900px] rounded-full transform-gpu"
           animate={{ scale: [1, 1.12, 1], opacity: [0.6, 1, 0.6] }}
           transition={{ duration: 12, repeat: Infinity, ease: 'easeInOut' }}
           style={{
+            x: parallaxX,
+            y: parallaxY,
             background: 'radial-gradient(circle, rgba(249,115,22,0.14) 0%, rgba(249,115,22,0.04) 50%, transparent 70%)',
             filter: 'blur(60px)',
           } as any}
         />
         <motion.div
-          style={{
-            x: useTransform(parallaxX, v => v * -1.2),
-            y: useTransform(parallaxY, v => v * -1.2),
-          } as any}
           className="absolute bottom-0 left-0 w-[600px] h-[600px] rounded-full transform-gpu"
           animate={{ scale: [1, 1.2, 1], opacity: [0.3, 0.6, 0.3] }}
           transition={{ duration: 18, repeat: Infinity, ease: 'easeInOut', delay: 4 }}
           style={{
+            x: useTransform(parallaxX, v => v * -1.2),
+            y: useTransform(parallaxY, v => v * -1.2),
             background: 'radial-gradient(circle, rgba(139,92,246,0.1) 0%, transparent 70%)',
             filter: 'blur(80px)',
           } as any}
