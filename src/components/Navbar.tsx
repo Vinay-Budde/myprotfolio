@@ -86,7 +86,7 @@ export const Navbar = () => {
             <Monitor size={20} className="text-white" />
           </motion.div>
           <span className="text-xl font-black tracking-tighter text-white uppercase"
-            style={{ textShadow: '0 0 20px rgba(249,115,22,0.2)' }}
+            style={{ textShadow: '0 0 20px' }}
           >
             Budde <span className="text-orange-500">Vinay</span>
           </span>
@@ -149,8 +149,8 @@ export const Navbar = () => {
 
            {/* Call to Actions */}
            <motion.a 
-             href="/vinayresume.pdf" 
-             download="Vinay_Budde_Resume.pdf"
+             href="/CV_Vinay_1233.pdf" 
+             download="CV_Vinay_1233.pdf"
              whileHover={{ scale: 1.05 }}
              className="hidden md:block text-[10px] font-black uppercase tracking-[0.15em] text-orange-500/80 hover:text-orange-500 transition-colors"
            >
@@ -211,8 +211,8 @@ export const Navbar = () => {
 
               <div className="pt-8 border-t border-white/5 flex flex-col gap-6">
                 <a 
-                  href="/vinayresume.pdf" 
-                  download="Vinay_Budde_Resume.pdf"
+                  href="/CV_Vinay_1233.pdf" 
+                  download="CV_Vinay_1233.pdf"
                   className="text-sm font-black uppercase tracking-widest text-orange-500 flex items-center gap-2"
                 >
                   Download Resume
